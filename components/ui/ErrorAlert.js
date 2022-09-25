@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
-import classes from '../../styles/ErrorAlert.module.css';
+import classes from './ErrorAlert.module.css';
 
 function ErrorAlert(props) {
   return (

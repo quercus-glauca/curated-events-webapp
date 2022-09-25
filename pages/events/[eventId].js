@@ -5,6 +5,7 @@ import EventLogistics from '../../components/event-detail/event-logistics';
 import EventContent from '../../components/event-detail/event-content';
 import ErrorAlert from '../../components/ui/ErrorAlert';
 import Button from '../../components/ui/Button';
+import Comments from '../../components/input/comments';
 import { fetchAllEvents } from "../../data/data-provider";
 import { getFeaturedEvents, getEventById } from "../../data/data-helper";
 
@@ -40,7 +41,10 @@ export default function EventDetailPage(props) {
         image={event.image}
         imageAlt={event.title}
       />
-      <EventContent><p>{event.description}</p></EventContent>
+      <EventContent>
+        <p>{event.description}</p>
+      </EventContent>
+      <Comments eventId={event.id} />
     </Fragment>
   );
 }

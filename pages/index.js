@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
+import NewsletterRegistration from '../components/input/NewsletterRegistration';
 import EventList from "../components/events/EventList";
 import { fetchAllEvents } from "../data/data-provider";
 import { getFeaturedEvents } from "../data/data-helper";
@@ -11,6 +12,7 @@ export default function HomePage(props) {
       <Head>
         <title>NextJS Events</title>
       </Head>
+      <NewsletterRegistration />
       <EventList listEvents={featuredEvents} />
     </Fragment>
   );

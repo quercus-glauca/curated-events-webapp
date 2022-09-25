@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import classes from '../../styles/Button.module.css';
+import classes from './Button.module.css';
 
 export default function Button(props) {
   const { toLink } = props;
