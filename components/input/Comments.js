@@ -14,7 +14,20 @@ function Comments(props) {
   }
 
   function addCommentHandler(commentData) {
-    // send data to API
+    fetch(`/api/comments/${eventId}`, {
+      method: 'POST',
+      body: JSON.stringify(commentData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('API Response:', data);
+        console.log('API Message:', data.message);
+      })
+      .catch((error) => console.log('API Error:', error));
+
   }
 
   return (
@@ -22,8 +35,12 @@ function Comments(props) {
       <button onClick={toggleCommentsHandler}>
         {showComments ? 'Hide' : 'Show'} Comments
       </button>
-      {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && <CommentList />}
+      {showComments && <NewComment
+        onAddComment={addCommentHandler}
+      />}
+      {showComments && <CommentList
+        eventId={eventId}
+      />}
     </section>
   );
 }

@@ -26,11 +26,11 @@ function NewsletterRegistration() {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log('Registration Data:', data);
+      console.log('API Response:', data);
       setRegistrationMessage(data.message);
       setIsRegistered(true);
     })
-    .catch((error) => console.log('Registration Error:', error));
+    .catch((error) => console.log('API Error:', error));
 
   }
 
