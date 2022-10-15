@@ -1,44 +1,105 @@
-const urlDatabase = 'https://react-getting-started-83b11-default-rtdb.europe-west1.firebasedatabase.app/'
-const urlCollection = `${urlDatabase}events.json`;
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// CLIENT DATA PROVIDER < process.env...
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+  getAllEvents as dummy_getAllEvents,
+  getFeaturedEvents as dummy_getFeaturedEvents,
+  getFilteredEvents as dummy_getFilteredEvents,
+  getEventById as dummy_getEventById
+} from './dummy-data-provider';
 
-export const API_URL = urlCollection;
+import {
+  getAllEvents as firebase_getAllEvents,
+  getFeaturedEvents as firebase_getFeaturedEvents,
+  getFilteredEvents as firebase_getFilteredEvents,
+  getEventById as firebase_getEventById
+} from './firebase-data-provider';
 
-export async function fetchAllEvents() {
-  let response = await fetch(urlCollection);
-  console.log('Data Provider GET Response Status:', response.status, response.statusText);
-  if (response.status !== 200) {
-    return [];
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SYNC Version
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export function getAllEventsSync() {
+  if (process.env.EVENTS_PROVIDER === "dummy") {
+    return dummy_getAllEvents();
   }
-
-  let data = await response.json();
-  const allEvents = [];
-  Object.entries(data).forEach(([key, entry]) => {
-    const event = {
-      key,
-      ...entry
-    };
-    allEvents.push(event);
-  });
-
-  console.log('Data Provider:', allEvents.length, 'Entries Fetched');
-  return allEvents;
+  console.assert(false, 'Configuration Failure!');
+  return null;
 }
 
-export async function postEvent({ id, title, description, location, date, image, isFeatured }) {
-  const entry = { id, title, description, location, date, image, isFeatured };
-  let response = await fetch(urlCollection, {
-    method: 'POST',
-    body: JSON.stringify(entry),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  console.log('Data Provider POST Response Status:', response.status, response.statusText);
-  if (response.status !== 200) {
-    return false;
+export function getFeaturedEventsSync() {
+  if (process.env.EVENTS_PROVIDER === "dummy") {
+    return dummy_getFeaturedEvents();
   }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
 
-  let data = await response.json();
-  console.log('Data Provider POST Response Data:', data);
-  return true;
+export function getFilteredEventsSync(dateFilter) {
+  if (process.env.EVENTS_PROVIDER === "dummy") {
+    return dummy_getFilteredEvents(dateFilter);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export function getEventByIdSync(id) {
+  if (process.env.EVENTS_PROVIDER === "dummy") {
+    return dummy_getEventById(id);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ASYNC Version
+// Return an explicit Promise to let the Client to Synch to the Result
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export async function getAllEvents() {
+  if (process.env.EVENTS_PROVIDER === "firebase") {
+    return new Promise((resolve, reject) => {
+      firebase_getAllEvents()
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export async function getFeaturedEvents() {
+  if (process.env.EVENTS_PROVIDER === "firebase") {
+    return new Promise((resolve, reject) => {
+      firebase_getFeaturedEvents()
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export async function getFilteredEvents(dateFilter) {
+  if (process.env.EVENTS_PROVIDER === "firebase") {
+    return new Promise((resolve, reject) => {
+      firebase_getFilteredEvents(dateFilter)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export async function getEventById(id) {
+  if (process.env.EVENTS_PROVIDER === "firebase") {
+    return new Promise((resolve, reject) => {
+      firebase_getEventById(id)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
 }
