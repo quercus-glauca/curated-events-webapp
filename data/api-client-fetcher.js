@@ -20,10 +20,10 @@ const sampleEvent = {
   date: '2021-05-12',
   image: 'images/coding-event.jpg',
   isFeatured: false,
-  userComments: [],
 };
 
 const sampleUserComment = {
+  eventId: '',
   date: new Date(),
   email: '',
   name: '',
