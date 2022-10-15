@@ -6,7 +6,7 @@ import EventContent from '../../components/event-detail/EventContent';
 import ErrorAlert from '../../components/ui/ErrorAlert';
 import Button from '../../components/ui/Button';
 import Comments from '../../components/input/comments';
-import { getFeaturedEvents, getEventById } from "../../data//data-provider";
+import { getFeaturedEvents, getEventById } from "../../data/server-data-provider";
 
 export default function EventDetailPage(props) {
   const isLoading = !('done' in props);

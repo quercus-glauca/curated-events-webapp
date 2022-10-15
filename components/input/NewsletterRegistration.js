@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { postRegistrationData } from '../../data/api-client-fetcher';
 import classes from './NewsletterRegistration.module.css';
 
 function NewsletterRegistration() {
@@ -9,27 +10,29 @@ function NewsletterRegistration() {
   function registrationHandler(event) {
     event.preventDefault();
 
-    // optional: validate input
+    // Optional at Frontend: Validate Input
     const enteredEmail = emailInputRef.current.value;
     const registrationData = {
       email: enteredEmail,
     };
 
-    fetch('/api/registration', {
-      method: 'POST',
-      body: JSON.stringify(registrationData),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    postRegistrationData(registrationData)
+    .then((item) => {
+      console.log('Registration Result:', item);
+      if (typeof item === "string") {
+        // Failed
+        setRegistrationMessage(item);
+        setIsRegistered(true);
+      }
+      else {
+        // Succeeded
+        setRegistrationMessage(item.welcome);
+        setIsRegistered(true);
+      }
     })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('API Response:', data);
-      setRegistrationMessage(data.message);
-      setIsRegistered(true);
-    })
-    .catch((error) => console.log('API Error:', error));
-
+    .catch((error) => {
+      console.log('Registration Error:', error);
+    });
   }
 
   const caption = (isRegistered 

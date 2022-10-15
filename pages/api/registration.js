@@ -1,22 +1,56 @@
-export default function handler(req, res) {
+import {
+  buildGetResponse,
+  buildPostResponse,
+  buildDeleteResponse,
+  buildMethodNotAllowed
+} from "../../helpers/api-response-helper";
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// API Entry Point: /api/registration
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export default async function handler(req, res) {
+  console.log(`[API] ${req.method} /api/registration HANDLER BEGIN...`);
+
   if (req.method === 'POST') {
-    const registrationData = req.body;
-    const userEmail = registrationData.email;
+    try {
+      const registrationData = req.body.registrationData;
+      const userEmail = registrationData.email;
 
-    if (!userEmail || !userEmail.includes('@')) {
-      res.status(422).json({ message: 'Invalid email address.' });
-      return;
+      // Must at Backend: Validate Input
+      let finalItemOrErrorString;
+      if (!userEmail || !userEmail.includes('@')) {
+        finalItemOrErrorString = 'Invalid email address.';
+      }
+      else {
+        finalItemOrErrorString = {
+          ...registrationData,
+          date: new Date(),
+          welcome: 'Welcome! You are now registered. Thank you!',
+        };
+      }
+
+      console.log('[DEBUG] finalItemOrErrorString:', finalItemOrErrorString);
+
+      const [, status, response] = buildPostResponse(
+        "/api/registration",
+        finalItemOrErrorString,
+        "the registration data");
+      console.log(`[API] ${req.method} Responding to client...`);
+      res.status(status).json(response);
     }
-
-    console.log('Registration:', userEmail);
-    res.status(201).json({
-      message: 'You are now registered!',
-      details: `Registration data: ${registrationData.email}`
-    });
+    catch (error) {
+      console.error(`[API] ${req.method} Error:`, error);
+      res.status(500).json(error);
+    }
 
   }
   else {
-    // 405 Method Not Allowed
-    res.status(405).json({ message: `${req.method} request received. Try it again using POST.` });
+    const [, status, response] = buildMethodNotAllowed(
+      "/api/registration",
+      req.method);
+    console.log(`[API] ${req.method} Responding to client...`);
+    res.status(status).json(response);
   }
+
+  console.log(`[API] ${req.method} /api/registration HANDLER END`);
 }
