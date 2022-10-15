@@ -35,33 +35,45 @@ function appendSimpleComment(newComment) {
 }
 
 export default function handler(req, res) {
+  const { eventId } = req.query;
+
   if (req.method === 'GET') {
-    const { eventId } = req.query;
-    const comments = readSimpleComments();
+    const eventComments = readSimpleComments();
     res.status(200).json({
       message: 'Some comments found!',
       eventId: eventId,
-      comments: comments,
+      comments: eventComments,
     });
-
+    return;
   }
-  else if (req.method === 'POST') {
-    const { eventId } = req.query;
-    const commentData = req.body;
-    appendSimpleComment(commentData);
+
+  if (req.method === 'POST') {
+    const { email, name, text } = req.body;
+    if (
+      !email.includes('@') ||
+      !name || name.trim() === '' ||
+      !text || text.trim() === ''
+    ) {
+      res.status(422).json({ message: 'Invalid input.' });
+      return;
+    }
+
+    const userComment = {
+      id: new Date().toISOString(),
+      email,
+      name,
+      text,
+    };
+
+    appendSimpleComment(userComment);
     res.status(201).json({
       message: 'Thank you for your comment!',
       eventId: eventId,
-      comment: {
-        email: commentData.email,
-        name: commentData.name,
-        text: commentData.text,
-      },
+      comment: userComment,
     });
+    return;
+  }
 
-  }
-  else {
-    // 405 Method Not Allowed
-    res.status(405).json({ message: `${req.method} request received. Only GET and POST are allowed.` });
-  }
+  // 405 Method Not Allowed
+  res.status(405).json({ message: `${req.method} request received. Only GET and POST are allowed.` });
 }

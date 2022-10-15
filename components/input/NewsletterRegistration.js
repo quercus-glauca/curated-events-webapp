@@ -9,9 +9,7 @@ function NewsletterRegistration() {
   function registrationHandler(event) {
     event.preventDefault();
 
-    // fetch user input (state or refs)
     // optional: validate input
-    // send valid data to API
     const enteredEmail = emailInputRef.current.value;
     const registrationData = {
       email: enteredEmail,
