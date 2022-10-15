@@ -31,13 +31,13 @@ const DUMMY_EVENTS = [
   },
 ];
 
-export function getFeaturedEvents() {
-  return DUMMY_EVENTS.filter((event) => event.isFeatured);
-}
-
 export function getAllEvents() {
   return DUMMY_EVENTS;
 }
+
+export function getFeaturedEvents() {
+  return DUMMY_EVENTS.filter((event) => event.isFeatured);
+}  
 
 export function getFilteredEvents(dateFilter) {
   const { year, month } = dateFilter;

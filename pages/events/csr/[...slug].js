@@ -5,7 +5,6 @@ import EventList from '../../../components/events/EventList';
 import ResultsTitle from '../../../components/ui/ResultsTitle';
 import ErrorAlert from '../../../components/ui/ErrorAlert';
 import Button from '../../../components/ui/Button';
-import { API_URL } from "../../../data/data-provider";
 import { getFilteredEvents } from "../../../data/data-helper";
 
 export default function FilteredEventsPage() {
@@ -14,7 +13,7 @@ export default function FilteredEventsPage() {
   const [allEvents, setAllEvents] = useState();
   const router = useRouter();
   const fetcher = (...args) => fetch(...args).then(res => res.json());
-  const { data, error } = useSWR(API_URL, fetcher);
+  const { data, error } = useSWR(process.env.FIREBASE_URL, fetcher);
   console.log('SWR Running...');
 
   useEffect(() => {

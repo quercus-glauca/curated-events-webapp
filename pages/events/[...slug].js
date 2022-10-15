@@ -3,8 +3,7 @@ import EventList from '../../components/events/EventList';
 import ResultsTitle from '../../components/ui/ResultsTitle';
 import ErrorAlert from '../../components/ui/ErrorAlert';
 import Button from '../../components/ui/Button';
-import { fetchAllEvents } from "../../data/data-provider";
-import { getFilteredEvents } from "../../data/data-helper";
+import { getFilteredEvents } from "../../data//data-provider";
 
 export default function FilteredEventsPage(props) {
   const isLoading = !('done' in props);
@@ -61,8 +60,7 @@ export async function getServerSideProps(context) {
       isValid = true;
     }
   }
-  const allEvents = await fetchAllEvents();
-  const events = getFilteredEvents(allEvents, { year, month });
+  const events = await getFilteredEvents({ year, month });
 
   return {
     props: {

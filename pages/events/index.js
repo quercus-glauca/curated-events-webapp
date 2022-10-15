@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from "next/router";
 import EventsSearch from "../../components/events/EventsSearch";
 import EventList from "../../components/events/EventList";
-import { fetchAllEvents } from "../../data/data-provider";
+import { getAllEvents } from "../../data//data-provider";
 
 export default function AllEventsPage(props) {
   const { allEvents } = props;
@@ -26,7 +26,7 @@ export default function AllEventsPage(props) {
 }
 
 export async function getStaticProps() {
-  const allEvents = await fetchAllEvents();
+  const allEvents = await getAllEvents();
 
   return {
     props: { 

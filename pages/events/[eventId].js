@@ -6,8 +6,7 @@ import EventContent from '../../components/event-detail/EventContent';
 import ErrorAlert from '../../components/ui/ErrorAlert';
 import Button from '../../components/ui/Button';
 import Comments from '../../components/input/comments';
-import { fetchAllEvents } from "../../data/data-provider";
-import { getFeaturedEvents, getEventById } from "../../data/data-helper";
+import { getFeaturedEvents, getEventById } from "../../data//data-provider";
 
 export default function EventDetailPage(props) {
   const isLoading = !('done' in props);
@@ -53,8 +52,7 @@ export async function getStaticProps(context) {
   const { params } = context;
   let { eventId, event } = params;
   if (!event) {
-    const allEvents = await fetchAllEvents();
-    event = getEventById(allEvents, eventId);
+    event = await getEventById(eventId);
   }
 
   return {
@@ -68,8 +66,7 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  const allEvents = await fetchAllEvents();
-  const featuredEvents = getFeaturedEvents(allEvents);
+  const featuredEvents = await getFeaturedEvents();
   const featuredParams = featuredEvents.map((event) => ({
     params: {
       eventId: event.id,
