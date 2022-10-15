@@ -1,4 +1,4 @@
-import classes from './event-content.module.css';
+import classes from './EventContent.module.css';
 
 function EventContent(props) {
   return (
