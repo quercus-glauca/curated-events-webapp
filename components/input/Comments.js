@@ -1,7 +1,7 @@
 import { useState } from 'react';
-
 import CommentList from './CommentList';
 import NewComment from './NewComment';
+import { postUserComment } from '../../data/api-client-fetcher';
 import classes from './Comments.module.css';
 
 function Comments(props) {
@@ -13,21 +13,30 @@ function Comments(props) {
     setShowComments((prevStatus) => !prevStatus);
   }
 
-  function addCommentHandler(commentData) {
-    fetch(`/api/comments/${eventId}`, {
-      method: 'POST',
-      body: JSON.stringify(commentData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('API Response:', data);
-        console.log('API Message:', data.message);
+  function addCommentHandler(userComment) {
+    const toInsertUserComment = {
+      eventId: eventId,
+      date: new Date().toISOString(),
+      email: userComment.email,
+      name: userComment.name,
+      text: userComment.text
+    };
+    postUserComment(eventId, toInsertUserComment)
+      .then((item) => {
+        if (typeof item === "string") {
+          // Failed
+          // <<TODO>> UI Feedback
+          console.log('New comment result: Failed!', item);
+        }
+        else {
+          // Succeeded
+          // <<TODO>> UI Feedback
+          console.log('New comment result: Succeeded!');
+        }
       })
-      .catch((error) => console.log('API Error:', error));
-
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   return (

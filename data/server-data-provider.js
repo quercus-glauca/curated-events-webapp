@@ -1,25 +1,44 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// SERVER DATA PROVIDER < process.env...
+// SERVER Data Provider - Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import {
   getAllEvents as dummy_getAllEvents,
   getFeaturedEvents as dummy_getFeaturedEvents,
   getFilteredEvents as dummy_getFilteredEvents,
-  getEventById as dummy_getEventById
+  getEventById as dummy_getEventById,
+  getUserComments as dummy_getUserComments,
+  postUserComment as dummy_postUserComment, 
+  deleteUserComment as dummy_deleteUserComment,
 } from './dummy-data-provider';
+
+import {
+  getUserComments as fs_getUserComments,
+  postUserComment as fs_postUserComment, 
+  deleteUserComment as fs_deleteUserComment,
+} from './fs-data-provider';
 
 import {
   getAllEvents as firebase_getAllEvents,
   getFeaturedEvents as firebase_getFeaturedEvents,
   getFilteredEvents as firebase_getFilteredEvents,
-  getEventById as firebase_getEventById
+  getEventById as firebase_getEventById,
 } from './firebase-data-provider';
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// SAMPLE DATA
+// SAMPLE DATA § RegistrationData
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const sampleSimpleEvent = {
+const sampleRegistrationData = {
+  date: new Date().toISOString(),
+  email: '',
+  name: '',
+};
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SAMPLE DATA § Events
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const sampleEvent = {
   id: 'e1',
   title: 'Programming for everyone',
   description:
@@ -32,7 +51,24 @@ const sampleSimpleEvent = {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// SYNC Version
+// SAMPLE DATA § UserComments
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const sampleUserComment = {
+  eventId: '',
+  date: new Date().toISOString(),
+  email: '',
+  name: '',
+  text: '',
+};
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § RegistrationData : <<TODO>> Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § Events : SYNC Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export function getAllEventsSync() {
   if (process.env.EVENTS_PROVIDER === "dummy") {
@@ -68,7 +104,7 @@ export function getEventByIdSync(id) {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ASYNC Version
+// § Events : ASYNC Backend Implementation
 // Return an explicit Promise to let the Client to Synch to the Result
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export async function getAllEvents() {
@@ -118,3 +154,58 @@ export async function getEventById(id) {
   console.assert(false, 'Configuration Failure!');
   return null;
 }
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § UserComments : SYNC Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export function getUserCommentsSync(eventId) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_getUserComments(eventId);
+  }
+  else if (process.env.COMMENTS_PROVIDER === "fs") {
+    return fs_getUserComments(eventId);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export function postUserCommentSync(eventId, userComment) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_postUserComment(eventId, userComment);
+  }
+  else if (process.env.COMMENTS_PROVIDER === "fs") {
+    return fs_postUserComment(eventId, userComment);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export function deleteUserCommentSync(eventId, userComment) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_deleteUserComment(eventId, userComment);
+  }
+  else if (process.env.COMMENTS_PROVIDER === "fs") {
+    return fs_deleteUserComment(eventId, userComment);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § UserComments : ASYNC Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export async function getUserComments(eventId) {
+  // <<TODO>>
+}
+
+export async function postUserComment(eventId, userComment) {
+  // <<TODO>>
+}
+
+export async function deleteUserComment(eventId, userComment) {
+  // <<TODO>>
+}
+
+

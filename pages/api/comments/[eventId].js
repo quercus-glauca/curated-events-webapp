@@ -1,79 +1,84 @@
-import fs from 'fs';
-import path from 'path';
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// API Entry Point: /api/comments/[eventId]
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+  getUserComments,
+  getUserCommentsSync,
+  postUserComment,
+  postUserCommentSync,
+  deleteUserComment,
+  deleteUserCommentSync,
+} from '../../../data/server-data-provider';
 
-const DUMMY_COMMENTS = [
-  {
-    email: 'hello@its.me',
-    name: 'Maximilian',
-    text: 'My comment is amazing!',
-  },
-  {
-    email: 'hithere@its.me',
-    name: 'Angela',
-    text: 'My comment is awesome!',
-  },
-  {
-    email: 'hithere@its.me',
-    name: 'Severus',
-    text: 'My comment is thrilling!',
-  },
-];
+import {
+  validateUserComment
+} from '../../../helpers/comments-data-helper';
 
-const simpleCommentsFilePath = path.join(process.cwd(), 'data', 'simple-comments.json');
+import {
+  buildGetResponse,
+  buildPostResponse,
+  buildDeleteResponse,
+  buildMethodNotAllowed
+} from '../../../helpers/api-response-helper';
 
-function readSimpleComments() {
-  const fileData = fs.readFileSync(simpleCommentsFilePath);
-  const comments = JSON.parse(fileData);
-  return comments;
-}
 
-function appendSimpleComment(newComment) {
-  const fileData = fs.readFileSync(simpleCommentsFilePath);
-  const comments = JSON.parse(fileData);
-  comments.push(newComment);
-  fs.writeFileSync(simpleCommentsFilePath, JSON.stringify(comments));
-}
-
-export default function handler(req, res) {
-  const { eventId } = req.query;
+export default async function handler(req, res) {
+  console.log(`[API] ${req.method} /api/comments HANDLER BEGIN...`);
 
   if (req.method === 'GET') {
-    const eventComments = readSimpleComments();
-    res.status(200).json({
-      message: 'Some comments found!',
-      eventId: eventId,
-      comments: eventComments,
-    });
-    return;
-  }
+    try {
+      const eventId = req.query.eventId;
+      const userComments = (process.env.COMMENTS_PROVIDER_SYNC === "true")
+        ? getUserCommentsSync(eventId)
+        : await getUserComments(eventId);
 
-  if (req.method === 'POST') {
-    const { email, name, text } = req.body;
-    if (
-      !email.includes('@') ||
-      !name || name.trim() === '' ||
-      !text || text.trim() === ''
-    ) {
-      res.status(422).json({ message: 'Invalid input.' });
-      return;
+      const [, status, response] = buildGetResponse(
+        `/api/comments/${eventId}`,
+        userComments,
+        `all the comments about the event '${eventId}'`);
+      console.log(`[API] ${req.method} Responding to client...`);
+      res.status(status).json(response);
     }
-
-    const userComment = {
-      id: new Date().toISOString(),
-      email,
-      name,
-      text,
-    };
-
-    appendSimpleComment(userComment);
-    res.status(201).json({
-      message: 'Thank you for your comment!',
-      eventId: eventId,
-      comment: userComment,
-    });
-    return;
+    catch (error) {
+      console.error(`[API] ${req.method} Error:`, error);
+      res.status(500).json(error);
+    }
   }
 
-  // 405 Method Not Allowed
-  res.status(405).json({ message: `${req.method} request received. Only GET and POST are allowed.` });
+  else if (req.method === 'POST') {
+    try {
+      const eventId = req.query.eventId;
+      const userComment = req.body.userComment;
+
+      const [inputAccepted, rejectedDetails] = validateUserComment(userComment);
+
+      const insertedUserComment = (!inputAccepted
+        ? rejectedDetails
+        : ((process.env.COMMENTS_PROVIDER_SYNC === "true")
+          ? postUserCommentSync(eventId, userComment)
+          : await postUserComment(eventId, userComment))
+      );
+
+      const [, status, response] = buildPostResponse(
+        `/api/comments/${eventId}`,
+        insertedUserComment,
+        `the new comment about the event '${eventId}'`);
+      console.log(`[API] ${req.method} Responding to client...`);
+      res.status(status).json(response);
+    }
+    catch (error) {
+      console.error(`[API] ${req.method} Error:`, error);
+      res.status(500).json(error);
+    }
+  }
+
+  else {
+    const [, status, response] = buildMethodNotAllowed(
+      "/api/comments",
+      req.method);
+    console.log(`[API] ${req.method} Responding to client...`);
+    res.status(status).json(response);
+  }
+
+  console.log(`[API] ${req.method} /api/comments HANDLER END`);
 }

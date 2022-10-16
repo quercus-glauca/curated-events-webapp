@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getUserComments } from '../../data/api-client-fetcher';
 import classes from './CommentList.module.css';
 
 function CommentList(props) {
@@ -7,14 +8,26 @@ function CommentList(props) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    fetch(`/api/comments/${eventId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('API Response:', data);
-        console.log('API Message:', data.message);
-        setComments(data.comments);
+    getUserComments(eventId)
+      .then((items) => {
+        if (typeof items === "string") {
+          // Failed
+          const onFailComments = [{
+            date: new Date().toISOString(),
+            email: 'error@app.oh',
+            name: 'Application Error',
+            text: items,
+          }];
+          setComments(onFailComments);
+        }
+        else {
+          // Succeeded
+          setComments(items);
+        }
       })
-      .catch((error) => console.log('API Error:', error));
+      .catch((error) => {
+        console.error(error);
+      });
 
   }, []);
 

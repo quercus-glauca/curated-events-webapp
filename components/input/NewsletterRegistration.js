@@ -17,26 +17,26 @@ function NewsletterRegistration() {
     };
 
     postRegistrationData(registrationData)
-    .then((item) => {
-      console.log('Registration Result:', item);
-      if (typeof item === "string") {
-        // Failed
-        setRegistrationMessage(item);
-        setIsRegistered(true);
-      }
-      else {
-        // Succeeded
-        setRegistrationMessage(item.welcome);
-        setIsRegistered(true);
-      }
-    })
-    .catch((error) => {
-      console.log('Registration Error:', error);
-    });
+      .then((item) => {
+        console.log('Registration Result:', item);
+        if (typeof item === "string") {
+          // Failed
+          setRegistrationMessage(item);
+          setIsRegistered(true);
+        }
+        else {
+          // Succeeded
+          setRegistrationMessage(item.welcome);
+          setIsRegistered(true);
+        }
+      })
+      .catch((error) => {
+        console.log('Registration Error:', error);
+      });
   }
 
-  const caption = (isRegistered 
-    ? registrationMessage 
+  const caption = (isRegistered
+    ? registrationMessage
     : 'Sign up to stay updated!');
 
   return (

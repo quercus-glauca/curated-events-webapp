@@ -1,35 +1,38 @@
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// API Entry Point: /api/registration
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import { 
+  validateRegistrationData 
+} from '../../helpers/registration-data-helper';
+
 import {
   buildGetResponse,
   buildPostResponse,
   buildDeleteResponse,
   buildMethodNotAllowed
-} from "../../helpers/api-response-helper";
+} from '../../helpers/api-response-helper';
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// API Entry Point: /api/registration
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 export default async function handler(req, res) {
   console.log(`[API] ${req.method} /api/registration HANDLER BEGIN...`);
 
   if (req.method === 'POST') {
     try {
       const registrationData = req.body.registrationData;
-      const userEmail = registrationData.email;
 
-      // Must at Backend: Validate Input
+      // This is a MUST at the Backend: VALIDATE USER INPUT
       let finalItemOrErrorString;
-      if (!userEmail || !userEmail.includes('@')) {
-        finalItemOrErrorString = 'Invalid email address.';
+      const [inputAccepted, rejectedDetails] = validateRegistrationData(registrationData);
+      if (!inputAccepted) {
+        finalItemOrErrorString = rejectedDetails;
       }
       else {
         finalItemOrErrorString = {
           ...registrationData,
-          date: new Date(),
+          date: new Date().toISOString(),
           welcome: 'Welcome! You are now registered. Thank you!',
         };
       }
-
-      console.log('[DEBUG] finalItemOrErrorString:', finalItemOrErrorString);
 
       const [, status, response] = buildPostResponse(
         "/api/registration",

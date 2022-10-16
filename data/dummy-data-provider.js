@@ -1,3 +1,10 @@
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// DUMMY Data Provider - Backend Server
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// DUMMY DATA § Events
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const DUMMY_EVENTS = [
   {
     id: 'e1',
@@ -37,7 +44,7 @@ export function getAllEvents() {
 
 export function getFeaturedEvents() {
   return DUMMY_EVENTS.filter((event) => event.isFeatured);
-}  
+}
 
 export function getFilteredEvents(dateFilter) {
   const { year, month } = dateFilter;
@@ -52,4 +59,44 @@ export function getFilteredEvents(dateFilter) {
 
 export function getEventById(id) {
   return DUMMY_EVENTS.find((event) => event.id === id);
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// DUMMY DATA § UserComments
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let DUMMY_COMMENTS = [
+  {
+    email: 'hello@its.me',
+    name: 'Maximilian',
+    text: 'My comment is amazing!',
+  },
+  {
+    email: 'hithere@its.me',
+    name: 'Angela',
+    text: 'My comment is awesome!',
+  },
+  {
+    email: 'hithere@its.me',
+    name: 'Severus',
+    text: 'My comment is thrilling!',
+  },
+];
+
+export function getUserComments(eventId) {
+  return DUMMY_COMMENTS;
+}
+
+export function postUserComment(eventId, userComment) {
+  DUMMY_COMMENTS.push(userComment);
+  return userComment;
+}
+
+export function deleteUserComment(eventId, userComment) {
+  DUMMY_COMMENTS = DUMMY_COMMENTS.filter((item) => (
+    item.email !== userComment.email ||
+    item.name !== userComment.name ||
+    item.text !== userComment.text
+  ));
+  return userComment;
 }
