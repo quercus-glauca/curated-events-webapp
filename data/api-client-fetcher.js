@@ -57,7 +57,7 @@ export async function postRegistrationData(registrationData) {
       .then((response) => (response.json()))
       .then((data) => {
         const { message, result } = data;
-        console.log('[API]', message);
+        console.debug('[API]', message);
         resolve(result.item);
       })
       .catch((error) => {
@@ -93,7 +93,7 @@ export async function getUserComments(eventId) {
       .then((response) => (response.json()))
       .then((data) => {
         const { message, result } = data;
-        console.log('[API]', message);
+        console.debug('[API]', message);
         resolve(result.items);
       })
       .catch((error) => {
@@ -122,7 +122,7 @@ export async function postUserComment(eventId, userComment) {
       .then((response) => (response.json()))
       .then((data) => {
         const { message, result } = data;
-        console.log('[API]', message);
+        console.debug('[API]', message);
         resolve(result.item);
       })
       .catch((error) => {

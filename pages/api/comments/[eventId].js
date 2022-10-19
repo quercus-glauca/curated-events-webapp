@@ -23,7 +23,7 @@ import {
 
 
 export default async function handler(req, res) {
-  console.log(`[API] ${req.method} /api/comments HANDLER BEGIN...`);
+  console.debug(`[API] ${req.method} /api/comments HANDLER BEGIN...`);
 
   if (req.method === 'GET') {
     try {
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         `/api/comments/${eventId}`,
         userComments,
         `all the comments about the event '${eventId}'`);
-      console.log(`[API] ${req.method} Responding to client...`);
+      console.debug(`[API] ${req.method} Responding to client...`);
       res.status(status).json(response);
     }
     catch (error) {
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
         `/api/comments/${eventId}`,
         insertedUserComment,
         `the new comment about the event '${eventId}'`);
-      console.log(`[API] ${req.method} Responding to client...`);
+      console.debug(`[API] ${req.method} Responding to client...`);
       res.status(status).json(response);
     }
     catch (error) {
@@ -76,9 +76,9 @@ export default async function handler(req, res) {
     const [, status, response] = buildMethodNotAllowed(
       "/api/comments",
       req.method);
-    console.log(`[API] ${req.method} Responding to client...`);
+    console.debug(`[API] ${req.method} Responding to client...`);
     res.status(status).json(response);
   }
 
-  console.log(`[API] ${req.method} /api/comments HANDLER END`);
+  console.debug(`[API] ${req.method} /api/comments HANDLER END`);
 }

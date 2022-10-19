@@ -25,13 +25,13 @@ function Comments(props) {
       .then((item) => {
         if (typeof item === "string") {
           // Failed
-          // <<TODO>> UI Feedback
           console.log('New comment result: Failed!', item);
+          // <<TODO>> UI Feedback
         }
         else {
           // Succeeded
-          // <<TODO>> UI Feedback
           console.log('New comment result: Succeeded!');
+          // <<TODO>> UI Feedback
         }
       })
       .catch((error) => {

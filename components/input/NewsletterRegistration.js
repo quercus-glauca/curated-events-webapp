@@ -21,11 +21,13 @@ function NewsletterRegistration() {
         console.log('Registration Result:', item);
         if (typeof item === "string") {
           // Failed
+          // <<TODO>> UI Feedback
           setRegistrationMessage(item);
           setIsRegistered(true);
         }
         else {
           // Succeeded
+          // <<TODO>> UI Feedback
           setRegistrationMessage(item.welcome);
           setIsRegistered(true);
         }

@@ -1,8 +1,8 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // API Entry Point: /api/registration
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import { 
-  validateRegistrationData 
+import {
+  validateRegistrationData
 } from '../../helpers/registration-data-helper';
 
 import {
@@ -14,7 +14,7 @@ import {
 
 
 export default async function handler(req, res) {
-  console.log(`[API] ${req.method} /api/registration HANDLER BEGIN...`);
+  console.debug(`[API] ${req.method} /api/registration HANDLER BEGIN...`);
 
   if (req.method === 'POST') {
     try {
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
         "/api/registration",
         finalItemOrErrorString,
         "the registration data");
-      console.log(`[API] ${req.method} Responding to client...`);
+      console.debug(`[API] ${req.method} Responding to client...`);
       res.status(status).json(response);
     }
     catch (error) {
@@ -51,9 +51,9 @@ export default async function handler(req, res) {
     const [, status, response] = buildMethodNotAllowed(
       "/api/registration",
       req.method);
-    console.log(`[API] ${req.method} Responding to client...`);
+    console.debug(`[API] ${req.method} Responding to client...`);
     res.status(status).json(response);
   }
 
-  console.log(`[API] ${req.method} /api/registration HANDLER END`);
+  console.debug(`[API] ${req.method} /api/registration HANDLER END`);
 }
