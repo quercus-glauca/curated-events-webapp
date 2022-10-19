@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import Head from 'next/head';
 import NewsletterRegistration from '../components/input/NewsletterRegistration';
 import EventList from "../components/events/EventList";
-import { getFeaturedEvents } from "../data/server-data-provider";
+import { getFeaturedEvents, getFeaturedEventsSync } from "../data/server-data-provider";
 
 export default function HomePage(props) {
   const { featuredEvents } = props;
@@ -18,7 +18,9 @@ export default function HomePage(props) {
 }
 
 export async function getStaticProps() {
-  const featuredEvents = await getFeaturedEvents();
+  const featuredEvents = process.env.EVENTS_PROVIDER_SYNC
+    ? getFeaturedEventsSync()
+    : await getFeaturedEvents();
 
   return {
     props: {

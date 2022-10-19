@@ -3,7 +3,7 @@ import EventList from '../../components/events/EventList';
 import ResultsTitle from '../../components/ui/ResultsTitle';
 import ErrorAlert from '../../components/ui/ErrorAlert';
 import Button from '../../components/ui/Button';
-import { getFilteredEvents } from "../../data/server-data-provider";
+import { getFilteredEvents, getFilteredEventsSync } from "../../data/server-data-provider";
 
 export default function FilteredEventsPage(props) {
   const isLoading = !('done' in props);
@@ -32,7 +32,7 @@ export default function FilteredEventsPage(props) {
       </Fragment>
     );
   }
-  
+
   const filteredDate = new Date(filterYear, filterMonth - 1);
   return (
     <Fragment>
@@ -60,7 +60,9 @@ export async function getServerSideProps(context) {
       isValid = true;
     }
   }
-  const events = await getFilteredEvents({ year, month });
+  const events = process.env.EVENTS_PROVIDER_SYNC
+    ? getFilteredEventsSync({ year, month })
+    : await getFilteredEvents({ year, month });
 
   return {
     props: {
