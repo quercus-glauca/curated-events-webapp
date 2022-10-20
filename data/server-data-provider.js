@@ -7,13 +7,13 @@ import {
   getFilteredEvents as dummy_getFilteredEvents,
   getEventById as dummy_getEventById,
   getUserComments as dummy_getUserComments,
-  postUserComment as dummy_postUserComment, 
+  postUserComment as dummy_postUserComment,
   deleteUserComment as dummy_deleteUserComment,
 } from './dummy-data-provider';
 
 import {
   getUserComments as fs_getUserComments,
-  postUserComment as fs_postUserComment, 
+  postUserComment as fs_postUserComment,
   deleteUserComment as fs_deleteUserComment,
 } from './fs-data-provider';
 
@@ -23,6 +23,12 @@ import {
   getFilteredEvents as firebase_getFilteredEvents,
   getEventById as firebase_getEventById,
 } from './firebase-data-provider';
+
+import {
+  getUserComments as mongodb_getUserComments,
+  postUserComment as mongodb_postUserComment,
+  deleteUserComment as mongodb_deleteUserComment,
+} from './mongodb-data-provider';
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,6 +60,7 @@ const sampleEvent = {
 // SAMPLE DATA § UserComments
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const sampleUserComment = {
+  _id: '',
   eventId: '',
   date: new Date().toISOString(),
   email: '',
@@ -197,15 +204,37 @@ export function deleteUserCommentSync(eventId, userComment) {
 // § UserComments : ASYNC Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export async function getUserComments(eventId) {
-  // <<TODO>>
+  if (process.env.COMMENTS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_getUserComments(eventId)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
 }
 
 export async function postUserComment(eventId, userComment) {
-  // <<TODO>>
+  if (process.env.COMMENTS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_postUserComment(eventId, userComment)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
 }
 
 export async function deleteUserComment(eventId, userComment) {
-  // <<TODO>>
+  if (process.env.COMMENTS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_deleteUserComment(eventId, userComment)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
 }
-
-
