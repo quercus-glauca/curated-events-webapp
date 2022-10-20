@@ -39,11 +39,16 @@ export async function getUserComments(eventId) {
     const db = client.db(curatedEventsDBName);
     const collection = db.collection(userCommentsCollectionName);
     const queryFilter = { eventId };
-    const cursor = collection.find(queryFilter);
+    const sortFilter = { date: -1 };
+    const cursor = collection.find(queryFilter).sort(sortFilter);
     const userComments = [];
     await cursor.forEach((item) => {
       userComments.push(item);
     });
+
+    // Check if there are more 'batches' of data
+    // Limit the number of returned Documents per 'batch'
+    // <<TODO>>
 
     // Check the 'result' and on FAILURE return an Error string
     // <<TODO>>
