@@ -22,20 +22,20 @@ function Comments(props) {
       text: userComment.text
     };
     postUserComment(eventId, toInsertUserComment)
-      .then((item) => {
-        if (typeof item === "string") {
-          // Failed
-          console.log('New comment result: Failed!', item);
-          // <<TODO>> UI Feedback
+      .then((result) => {
+        if (result.ok) {
+          // <<TODO>>  Show/Notify SUCCESS to User
+          console.log('New comment result: Succeeded!');
         }
         else {
-          // Succeeded
-          console.log('New comment result: Succeeded!');
-          // <<TODO>> UI Feedback
+          // <<TODO>> Show/Notify ERROR to User
+          console.error(`[ERROR] Status: ${result.status}. Message:`, result.essence);
         }
       })
       .catch((error) => {
-        console.error(error);
+        // <<TODO>> Show/Notify ERROR to User
+        const status = error.code || error.errno || error.syscall || 418;
+        console.error(`[ERROR] Status: ${status}. Message:`, error.message);
       });
   }
 

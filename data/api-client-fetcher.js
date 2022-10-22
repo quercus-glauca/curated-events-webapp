@@ -58,7 +58,7 @@ export async function postRegistrationData(registrationData) {
       .then((data) => {
         const { message, result } = data;
         console.debug('[API]', message);
-        resolve(result.item);
+        resolve(result);
       })
       .catch((error) => {
         console.error('[API] POST Error:', error);
@@ -94,7 +94,7 @@ export async function getUserComments(eventId) {
       .then((data) => {
         const { message, result } = data;
         console.debug('[API]', message);
-        resolve(result.items);
+        resolve(result);
       })
       .catch((error) => {
         console.error('[API] GET Error:', error);
@@ -123,7 +123,7 @@ export async function postUserComment(eventId, userComment) {
       .then((data) => {
         const { message, result } = data;
         console.debug('[API]', message);
-        resolve(result.item);
+        resolve(result);
       })
       .catch((error) => {
         console.error('[API] POST Error:', error);

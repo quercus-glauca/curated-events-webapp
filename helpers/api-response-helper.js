@@ -6,17 +6,16 @@
 //   @items   : a valid Object or an Error string with further details of failure
 //   @details : basic details of the operation as for success or failure
 // OUTPUT ARRAY
-//   ok       : Boolean, overall result
 //   status   : Number, an HTML Response Status Code
 //   response : Object, { message: '...', result: { <...> } }
 // { <...> }  : { itemsCount: <Number>, items: <Array> OR <ErrorString> }
 // { <...> }  : {                       item:  <Array> OR <ErrorString> }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function buildGetResponse(apiUrl, items, details) {
+export function buildGetResponse(apiUrl, items, verb, details) {
   let ok = false;
   let status = 404;
   let resultCount = 0;
-  let resultEssence = `Failed to find ${details}.`;
+  let resultEssence = `Failed to ${verb} ${details}.`;
   if (typeof items === "string") {
     resultEssence += ` ${items}`;
   }
@@ -28,19 +27,21 @@ export function buildGetResponse(apiUrl, items, details) {
   }
 
   const response = {
-    message: `GET '${apiUrl}' to find ${details} ${ok ? 'succeeded' : 'failed'}!`,
+    message: `GET '${apiUrl}': ${ok ? 'Succeeded' : 'Failed'} to ${verb} ${details}.`,
     result: {
-      itemsCount: resultCount,
-      items: resultEssence,
+      ok,
+      status,
+      count: resultCount,
+      essence: resultEssence,
     },
   }
-  return [ok, status, response];
+  return [status, response];
 }
 
-export function buildPostResponse(apiUrl, item, details) {
+export function buildPostResponse(apiUrl, item, verb, details) {
   let ok = false;
   let status = 422;
-  let resultEssence = `Failed to insert ${details}.`;
+  let resultEssence = `Failed to ${verb} ${details}.`;
   if (typeof item === "string") {
     resultEssence += ` ${item}`;
   }
@@ -51,18 +52,20 @@ export function buildPostResponse(apiUrl, item, details) {
   }
 
   const response = {
-    message: `POST '${apiUrl}' to insert ${details} ${ok ? 'succeeded' : 'failed'}!`,
+    message: `POST '${apiUrl}': ${ok ? 'Succeeded' : 'Failed'} to ${verb} ${details}.`,
     result: {
-      item: resultEssence,
+      ok,
+      status,
+      essence: resultEssence,
     },
   }
-  return [ok, status, response];
+  return [status, response];
 }
 
-export function buildDeleteResponse(apiUrl, item, details) {
+export function buildDeleteResponse(apiUrl, item, verb, details) {
   let ok = false;
   let status = 422;
-  let resultEssence = `Failed to delete ${details}.`;
+  let resultEssence = `Failed to ${verb} ${details}.`;
   if (typeof item === "string") {
     resultEssence += ` ${item}`;
   }
@@ -73,20 +76,38 @@ export function buildDeleteResponse(apiUrl, item, details) {
   }
 
   const response = {
-    message: `DELETE '${apiUrl}' to delete ${details} ${ok ? 'succeeded' : 'failed'}!`,
+    message: `DELETE '${apiUrl}': ${ok ? 'Succeeded' : 'Failed'} to ${verb} ${details}.`,
     result: {
-      item: resultEssence,
+      ok,
+      status,
+      essence: resultEssence,
     },
   }
-  return [ok, status, response];
+  return [status, response];
 }
 
 export function buildMethodNotAllowed(apiUrl, method) {
   const response = {
-    message: `${method} '${apiUrl}' request received. But this method is not implemented.`,
+    message: `${method} '${apiUrl}': Request received, but this method is not yet implemented.`,
     result: {
-      item: 'Method Not Allowed',
+      ok: false,
+      status: 405,
+      essence: `The ${method} method is not yet implemented at '${apiUrl}'`,
     },
   }
-  return [false, 405, response];
+  return [405, response];
+}
+
+export function buildErrorResponse(error, method, apiUrl, verb, details) {
+  let status = 500;
+  let resultEssence = `Failed to ${verb} ${details}: ${error.message}.`;
+  const response = {
+    message: `${method} '${apiUrl}' Error: ${resultEssence}`,
+    result: {
+      ok: false,
+      status,
+      essence: resultEssence,
+    },
+  }
+  return [status, response];
 }

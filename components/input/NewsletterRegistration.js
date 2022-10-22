@@ -17,23 +17,23 @@ function NewsletterRegistration() {
     };
 
     postRegistrationData(registrationData)
-      .then((item) => {
-        console.log('Registration Result:', item);
-        if (typeof item === "string") {
-          // Failed
-          // <<TODO>> UI Feedback
-          setRegistrationMessage(item);
+      .then((result) => {
+        if (result.ok) {
+          // <<TODO>> Show/Notify SUCCESS to User
+          setRegistrationMessage(result.essence.welcome);
           setIsRegistered(true);
         }
         else {
-          // Succeeded
-          // <<TODO>> UI Feedback
-          setRegistrationMessage(item.welcome);
+          // <<TODO>> Show/Notify ERROR to User
+          console.error(`[ERROR] Status: ${result.status}. Message:`, result.essence);
+          setRegistrationMessage(result.essence);
           setIsRegistered(true);
         }
       })
       .catch((error) => {
-        console.log('Registration Error:', error);
+        // <<TODO>> Show/Notify ERROR to User
+        const status = error.code || error.errno || error.syscall || 418;
+        console.error(`[ERROR] Status: ${status}. Message:`, error.message);
       });
   }
 

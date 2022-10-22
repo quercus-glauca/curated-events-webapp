@@ -12,6 +12,25 @@ const userCommentsCollectionName = 'userComments';
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § Helpers : ASYNC Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+async function connectMongoClient() {
+  const client = new MongoClient(mongodbUrl);
+  console.debug('[MONGODB] Connecting to the database...');
+  await client.connect();
+  console.debug('[MONGODB] Successfully connected!');
+  return client;
+}
+
+async function closeMongoClient(client) {
+  if (client) {
+    await client.close();
+  }
+  console.debug('[MONGODB] Connection closed.');
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § Events : ASYNC Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // <<TODO>>
@@ -26,16 +45,13 @@ const userCommentsCollectionName = 'userComments';
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § UserComments : ASYNC Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Find all the 'userComments' in the Database Collection
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export async function getUserComments(eventId) {
-  // Connect to the MongoDB Database
-  const client = new MongoClient(mongodbUrl);
-  console.debug('[MONGODB] Connecting to the database...');
-
+  let client;
   try {
-    await client.connect();
-    console.debug('[MONGODB] Successfully connected!');
-
-    // Find the Documents in the Collection
+    client = await connectMongoClient();
     const db = client.db(curatedEventsDBName);
     const collection = db.collection(userCommentsCollectionName);
     const queryFilter = { eventId };
@@ -51,31 +67,27 @@ export async function getUserComments(eventId) {
     // <<TODO>>
 
     // Check the 'result' and on FAILURE return an Error string
-    // <<TODO>>
-
     // On SUCCESS return an Array of Documents
-    return userComments;
+    const providerResult = userComments;
+
+    await closeMongoClient(client);
+    return providerResult;
   }
   catch (error) {
     console.error('[MONGODB] Error:', error);
-  }
-  finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-    console.debug('[MONGODB] Connection closed.');
+    closeMongoClient(client);
+    throw (error);
   }
 }
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Insert the 'userComment' into the Database Collection
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export async function postUserComment(eventId, userComment) {
-  // Connect to the MongoDB Database
-  const client = new MongoClient(mongodbUrl);
-  console.debug('[MONGODB] Connecting to the database...');
-
+  let client;
   try {
-    await client.connect();
-    console.debug('[MONGODB] Successfully connected!');
-
-    // Insert the Document into the Collection
+    client = await connectMongoClient();
     const db = client.db(curatedEventsDBName);
     const collection = db.collection(userCommentsCollectionName);
     const insertedUserComment = {
@@ -89,34 +101,30 @@ export async function postUserComment(eventId, userComment) {
     const result = await collection.insertOne(insertedUserComment);
 
     // Check the 'result' and on FAILURE return an Error string
-    console.debug('[MONGODB] result:', result);
-    if (!("acknowledged" in result) || !result.acknowledged) {
-      return 'Failed to insert the user comment into the database collection';
-    }
-
     // On SUCCESS return the full Document with its final '_id'
-    return insertedUserComment;
+    console.debug('[MONGODB] result:', result);
+    const providerResult = (!("acknowledged" in result) || !result.acknowledged)
+      ? 'Failed to insert the user comment into the database collection'
+      : insertedUserComment;
+
+    await closeMongoClient(client);
+    return providerResult;
   }
   catch (error) {
     console.error('[MONGODB] Error:', error);
-  }
-  finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-    console.debug('[MONGODB] Connection closed.');
+    closeMongoClient(client);
+    throw (error);
   }
 }
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Delete the 'userComment' from the Database Collection
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export async function deleteUserComment(eventId, userComment) {
-  // Connect to the MongoDB Database
-  const client = new MongoClient(mongodbUrl);
-  console.debug('[MONGODB] Connecting to the database...');
-
+  let client;
   try {
-    await client.connect();
-    console.debug('[MONGODB] Successfully connected!');
-
-    // Delete the Document from the Collection
+    client = await connectMongoClient();
     const db = client.db(curatedEventsDBName);
     const collection = db.collection(userCommentsCollectionName);
     const queryFilter = {
@@ -127,22 +135,18 @@ export async function deleteUserComment(eventId, userComment) {
     const result = await collection.findOneAndDelete(queryFilter);
 
     // Check the 'result' and on FAILURE return an Error string
-    console.debug('[MONGODB] result:', result);
-    if (_.isEmpty(result) || !("acknowledged" in result) || !result.acknowledged) {
-      return 'Failed to find and delete the user comment in the database collection';
-    }
-
     // On SUCCESS return the full Document
-    const deletedUserComment = result.value;
-    return deletedUserComment;
+    console.debug('[MONGODB] result:', result);
+    const providerResult = (_.isEmpty(result) || !("acknowledged" in result) || !result.acknowledged)
+      ? 'Failed to find and delete the user comment in the database collection'
+      : result.value;
+
+    await closeMongoClient(client);
+    return providerResult;
   }
   catch (error) {
     console.error('[MONGODB] Error:', error);
-  }
-  finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-    console.debug('[MONGODB] Connection closed.');
+    closeMongoClient(client);
+    throw (error);
   }
 }
-

@@ -9,16 +9,23 @@ import {
   buildGetResponse,
   buildPostResponse,
   buildDeleteResponse,
-  buildMethodNotAllowed
+  buildMethodNotAllowed,
+  buildErrorResponse
 } from '../../helpers/api-response-helper';
 
 
 export default async function handler(req, res) {
   console.debug(`[API] ${req.method} /api/registration HANDLER BEGIN...`);
 
+  const apiUrl = '/api/registration';
+  let operationVerb = '';
+  let operationDetails = '';
+
   if (req.method === 'POST') {
     try {
       const registrationData = req.body.registrationData;
+      operationVerb = 'acknowledge';
+      operationDetails = 'the registration data';
 
       // This is a MUST at the Backend: VALIDATE USER INPUT
       let finalItemOrErrorString;
@@ -27,6 +34,7 @@ export default async function handler(req, res) {
         finalItemOrErrorString = rejectedDetails;
       }
       else {
+        // <<TODO>> Forward the validated data to the Data Server
         finalItemOrErrorString = {
           ...registrationData,
           date: new Date().toISOString(),
@@ -34,24 +42,29 @@ export default async function handler(req, res) {
         };
       }
 
-      const [, status, response] = buildPostResponse(
-        "/api/registration",
+      const [status, response] = buildPostResponse(
+        apiUrl,
         finalItemOrErrorString,
-        "the registration data");
-      console.debug(`[API] ${req.method} Responding to client...`);
+        operationVerb,
+        operationDetails);
       res.status(status).json(response);
     }
     catch (error) {
-      console.error(`[API] ${req.method} Error:`, error);
-      res.status(500).json(error);
+      const [status, response] = buildErrorResponse(
+        error,
+        req.method,
+        apiUrl,
+        operationVerb,
+        operationDetails
+      );
+      res.status(status).json(response);
     }
 
   }
   else {
-    const [, status, response] = buildMethodNotAllowed(
-      "/api/registration",
+    const [status, response] = buildMethodNotAllowed(
+      apiUrl,
       req.method);
-    console.debug(`[API] ${req.method} Responding to client...`);
     res.status(status).json(response);
   }
 

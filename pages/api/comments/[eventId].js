@@ -18,40 +18,56 @@ import {
   buildGetResponse,
   buildPostResponse,
   buildDeleteResponse,
-  buildMethodNotAllowed
+  buildMethodNotAllowed,
+  buildErrorResponse
 } from '../../../helpers/api-response-helper';
 
 
 export default async function handler(req, res) {
   console.debug(`[API] ${req.method} /api/comments HANDLER BEGIN...`);
 
+  let apiUrl = '/api/comments/[eventId]';
+  let operationVerb = '';
+  let operationDetails = '';
+
   if (req.method === 'GET') {
     try {
       const eventId = req.query.eventId;
+      apiUrl = `/api/comments/${eventId}`;
+      operationVerb = 'find';
+      operationDetails = `all the comments about the event '${eventId}'`;
+
       const userComments = (process.env.COMMENTS_PROVIDER_SYNC === "true")
         ? getUserCommentsSync(eventId)
         : await getUserComments(eventId);
-
-      const [, status, response] = buildGetResponse(
-        `/api/comments/${eventId}`,
+      const [status, response] = buildGetResponse(
+        apiUrl,
         userComments,
-        `all the comments about the event '${eventId}'`);
-      console.debug(`[API] ${req.method} Responding to client...`);
+        operationVerb,
+        operationDetails);
       res.status(status).json(response);
     }
     catch (error) {
-      console.error(`[API] ${req.method} Error:`, error);
-      res.status(500).json(error);
+      const [status, response] = buildErrorResponse(
+        error,
+        req.method,
+        apiUrl,
+        operationVerb,
+        operationDetails
+      );
+      res.status(status).json(response);
     }
   }
 
   else if (req.method === 'POST') {
     try {
       const eventId = req.query.eventId;
+      apiUrl = `/api/comments/${eventId}`;
+      operationVerb = 'insert';
+      operationDetails = `the new comment about the event '${eventId}'`;
+
       const userComment = req.body.userComment;
-
       const [inputAccepted, rejectedDetails] = validateUserComment(userComment);
-
       const insertedUserComment = (!inputAccepted
         ? rejectedDetails
         : ((process.env.COMMENTS_PROVIDER_SYNC === "true")
@@ -59,24 +75,29 @@ export default async function handler(req, res) {
           : await postUserComment(eventId, userComment))
       );
 
-      const [, status, response] = buildPostResponse(
-        `/api/comments/${eventId}`,
+      const [status, response] = buildPostResponse(
+        apiUrl,
         insertedUserComment,
-        `the new comment about the event '${eventId}'`);
-      console.debug(`[API] ${req.method} Responding to client...`);
+        operationVerb,
+        operationDetails);
       res.status(status).json(response);
     }
     catch (error) {
-      console.error(`[API] ${req.method} Error:`, error);
-      res.status(500).json(error);
+      const [status, response] = buildErrorResponse(
+        error,
+        req.method,
+        apiUrl,
+        operationVerb,
+        operationDetails
+      );
+      res.status(status).json(response);
     }
   }
 
   else {
-    const [, status, response] = buildMethodNotAllowed(
-      "/api/comments",
+    const [status, response] = buildMethodNotAllowed(
+      apiUrl,
       req.method);
-    console.debug(`[API] ${req.method} Responding to client...`);
     res.status(status).json(response);
   }
 

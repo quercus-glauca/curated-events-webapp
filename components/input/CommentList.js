@@ -9,24 +9,19 @@ function CommentList(props) {
 
   useEffect(() => {
     getUserComments(eventId)
-      .then((items) => {
-        if (typeof items === "string") {
-          // Failed
-          const onFailComments = [{
-            date: new Date().toISOString(),
-            email: 'error@app.oh',
-            name: 'Application Error',
-            text: items,
-          }];
-          setComments(onFailComments);
+      .then((result) => {
+        if (result.ok) {
+          setComments(result.essence);
         }
         else {
-          // Succeeded
-          setComments(items);
+          // <<TODO>> Show/Notify ERROR to User
+          console.error(`[ERROR] Status: ${result.status}. Message:`, result.essence);
         }
       })
       .catch((error) => {
-        console.error(error);
+        // <<TODO>> Show/Notify ERROR to User
+        const status = error.code || error.errno || error.syscall || 418;
+        console.error(`[ERROR] Status: ${status}. Message:`, error.message);
       });
 
   }, []);
