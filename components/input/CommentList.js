@@ -1,27 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
+import { NotificationContext } from '../../context/NotificationProvider';
 import { getUserComments } from '../../data/api-client-fetcher';
 import classes from './CommentList.module.css';
 
 function CommentList(props) {
   const { eventId } = props;
-
+  const { showNotification, hideNotification } = useContext(NotificationContext);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
+    showNotification('pending', "Comments", "Loading comments...");
     getUserComments(eventId)
       .then((result) => {
         if (result.ok) {
+          hideNotification();
           setComments(result.essence);
         }
         else {
-          // <<TODO>> Show/Notify ERROR to User
-          console.error(`[ERROR] Status: ${result.status}. Message:`, result.essence);
+          showNotification('error', "Comments", `${result.essence}`);
         }
       })
       .catch((error) => {
-        // <<TODO>> Show/Notify ERROR to User
         const status = error.code || error.errno || error.syscall || 418;
-        console.error(`[ERROR] Status: ${status}. Message:`, error.message);
+        showNotification('error', "Comments", `Error (${status}): ${error.message}`);
       });
 
   }, []);
