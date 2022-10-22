@@ -59,6 +59,7 @@ function CommentsSection(props) {
       {showComments && <CommentList
         eventId={eventId}
         parentRef={commentsSectionRef}
+        updateList={updateSection}
       />}
     </section>
   );

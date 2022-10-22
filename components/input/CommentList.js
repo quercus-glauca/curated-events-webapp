@@ -4,7 +4,7 @@ import { getUserComments } from '../../data/api-client-fetcher';
 import classes from './CommentList.module.css';
 
 function CommentList(props) {
-  const { eventId } = props;
+  const { eventId, parentRef, updateList } = props;
   const { showNotification, hideNotification } = useContext(NotificationContext);
   const [comments, setComments] = useState([]);
 
@@ -15,7 +15,7 @@ function CommentList(props) {
         if (result.ok) {
           hideNotification();
           setComments(result.essence);
-          props.parentRef.current.scrollIntoView({ behavior: "smooth" });
+          parentRef.current.scrollIntoView({ behavior: "smooth" });
         }
         else {
           showNotification('error', "Comments", `${result.essence}`);
@@ -26,7 +26,7 @@ function CommentList(props) {
         showNotification('error', "Comments", `Error (${status}): ${error.message}`);
       });
 
-  }, []);
+  }, [updateList]);
 
   return (
     <ul className={classes.comments}>
