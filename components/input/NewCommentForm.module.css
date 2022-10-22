@@ -37,6 +37,19 @@
   background-color: #dcfff9;
 }
 
-.form button {
-  background-color: white;
+.button {
+  font: inherit;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.button:hover,
+.button:active {
+  background-color: #dcfff9;
+  color: #03be9f;
+  border: 1px solid #ccc;
 }

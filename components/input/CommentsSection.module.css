@@ -5,7 +5,7 @@
   text-align: center;
 }
 
-.comments button {
+.button {
   font: inherit;
   border-radius: 6px;
   padding: 0.5rem 1rem;
@@ -15,7 +15,7 @@
   cursor: pointer;
 }
 
-.comments button:hover,
-.comments button:active {
+.button:hover,
+.button:active {
   background-color: #dcfff9;
 }
