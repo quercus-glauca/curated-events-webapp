@@ -14,10 +14,10 @@ export default function Layout(props) {
     <Fragment>
       <MainHeader />
       <main>{props.children}</main>
-      {isNotificationVisible && <Notification
+      {isNotificationVisible && (<Notification
         notification={lastNotification}
         hideNotification={hideNotification}
-      />}
+      />)}
     </Fragment>
   );
 }

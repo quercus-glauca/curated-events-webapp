@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef } from 'react';
+import { NotificationContext } from '../../context/NotificationProvider';
 import { postRegistrationData } from '../../data/api-client-fetcher';
 import classes from './NewsletterRegistration.module.css';
 
 function NewsletterRegistration() {
   const emailInputRef = useRef();
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [registrationMessage, setRegistrationMessage] = useState();
+  const { showNotification } = useContext(NotificationContext);
 
   function registrationHandler(event) {
     event.preventDefault();
@@ -16,30 +16,24 @@ function NewsletterRegistration() {
       email: enteredEmail,
     };
 
+    showNotification('pending', "Registration", "Registration in progress...");
+
     postRegistrationData(registrationData)
       .then((result) => {
         if (result.ok) {
-          // <<TODO>> Show/Notify SUCCESS to User
-          setRegistrationMessage(result.essence.welcome);
-          setIsRegistered(true);
+          showNotification('success', "Registration", result.essence.welcome);
         }
         else {
-          // <<TODO>> Show/Notify ERROR to User
-          console.error(`[ERROR] Status: ${result.status}. Message:`, result.essence);
-          setRegistrationMessage(result.essence);
-          setIsRegistered(true);
+          showNotification('error', "Registration", `${result.essence}`);
         }
       })
       .catch((error) => {
-        // <<TODO>> Show/Notify ERROR to User
         const status = error.code || error.errno || error.syscall || 418;
-        console.error(`[ERROR] Status: ${status}. Message:`, error.message);
+        showNotification('error', "Registration", `Error (${status}): ${error.message}`);
       });
   }
 
-  const caption = (isRegistered
-    ? registrationMessage
-    : 'Sign up to stay updated!');
+  const caption = 'Sign up to stay updated!';
 
   return (
     <section className={classes.newsletter}>
