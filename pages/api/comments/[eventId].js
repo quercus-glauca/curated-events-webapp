@@ -29,6 +29,7 @@ export default async function handler(req, res) {
   let apiUrl = '/api/comments/[eventId]';
   let operationVerb = '';
   let operationDetails = '';
+  let greetingOnSuccess = '';
 
   if (req.method === 'GET') {
     try {
@@ -65,6 +66,7 @@ export default async function handler(req, res) {
       apiUrl = `/api/comments/${eventId}`;
       operationVerb = 'insert';
       operationDetails = `the new comment about the event '${eventId}'`;
+      greetingOnSuccess = 'Thank you for your comment!';
 
       const userComment = req.body.userComment;
       const [inputAccepted, rejectedDetails] = validateUserComment(userComment);
@@ -79,7 +81,8 @@ export default async function handler(req, res) {
         apiUrl,
         insertedUserComment,
         operationVerb,
-        operationDetails);
+        operationDetails,
+        greetingOnSuccess);
       res.status(status).json(response);
     }
     catch (error) {

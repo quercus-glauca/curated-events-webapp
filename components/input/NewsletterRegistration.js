@@ -21,7 +21,7 @@ function NewsletterRegistration() {
     postRegistrationData(registrationData)
       .then((result) => {
         if (result.ok) {
-          showNotification('success', "Registration", result.essence.welcome);
+          showNotification('success', "Registration", result.greeting);
         }
         else {
           showNotification('error', "Registration", `${result.essence}`);

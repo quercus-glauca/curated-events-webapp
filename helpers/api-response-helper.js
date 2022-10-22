@@ -2,16 +2,24 @@
 // API Response Helper - Backend Server Only
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // INPUT PARAMS
-//   @apiUrl  : '/api' or something similar
-//   @items   : a valid Object or an Error string with further details of failure
-//   @details : basic details of the operation as for success or failure
+//   @apiUrl   : '/api' or something similar
+//   @items    : a valid Object or an Error string with further details of failure
+//   @verb     : 'find', 'insert', 'delete', 'acknowledge', or whatever else
+//   @details  : basic details of the operation as for success or failure
+//   @greeting : [optional] greeting message for the user in case of Success
 // OUTPUT ARRAY
-//   status   : Number, an HTML Response Status Code
-//   response : Object, { message: '...', result: { <...> } }
-// { <...> }  : { itemsCount: <Number>, items: <Array> OR <ErrorString> }
-// { <...> }  : {                       item:  <Array> OR <ErrorString> }
+//   status    : Number, HTML Response Status Code for the Node.js response 
+//   response  : Object, to be JSON encoded for the Node.js response object
+// RESPONSE OBJECT DETAILS
+//   message   : String, operation abstract for logging/debugging purposes
+//   result    : Object
+//   .ok       : Boolean, to notify general success or failure
+//   .status   : Number, HTML Response Status Code
+//  [.count]   : Number, number of items returned in the .essence (on Success)
+//   .essence  : Object (on Success), Error String (on Failure)
+//  [.greeting]: String, optional greeting for the user (on Success)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function buildGetResponse(apiUrl, items, verb, details) {
+export function buildGetResponse(apiUrl, items, verb, details, greeting) {
   let ok = false;
   let status = 404;
   let resultCount = 0;
@@ -33,12 +41,17 @@ export function buildGetResponse(apiUrl, items, verb, details) {
       status,
       count: resultCount,
       essence: resultEssence,
+      ...(greeting && { greeting }),
     },
   }
   return [status, response];
 }
 
-export function buildPostResponse(apiUrl, item, verb, details) {
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// POST Response
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export function buildPostResponse(apiUrl, item, verb, details, greeting) {
   let ok = false;
   let status = 422;
   let resultEssence = `Failed to ${verb} ${details}.`;
@@ -57,12 +70,17 @@ export function buildPostResponse(apiUrl, item, verb, details) {
       ok,
       status,
       essence: resultEssence,
+      ...(greeting && { greeting }),
     },
   }
   return [status, response];
 }
 
-export function buildDeleteResponse(apiUrl, item, verb, details) {
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// DELETE Response
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export function buildDeleteResponse(apiUrl, item, verb, details, greeting) {
   let ok = false;
   let status = 422;
   let resultEssence = `Failed to ${verb} ${details}.`;
@@ -81,11 +99,16 @@ export function buildDeleteResponse(apiUrl, item, verb, details) {
       ok,
       status,
       essence: resultEssence,
+      ...(greeting && { greeting }),
     },
   }
   return [status, response];
 }
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Helper
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export function buildMethodNotAllowed(apiUrl, method) {
   const response = {
     message: `${method} '${apiUrl}': Request received, but this method is not yet implemented.`,
@@ -98,6 +121,10 @@ export function buildMethodNotAllowed(apiUrl, method) {
   return [405, response];
 }
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ERROR Response
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export function buildErrorResponse(error, method, apiUrl, verb, details) {
   let status = 500;
   let resultEssence = `Failed to ${verb} ${details}: ${error.message}.`;

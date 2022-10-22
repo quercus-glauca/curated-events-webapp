@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { NotificationContext } from '../../context/NotificationProvider';
 import CommentList from './CommentList';
 import NewComment from './NewComment';
 import { postUserComment } from '../../data/api-client-fetcher';
@@ -6,7 +7,7 @@ import classes from './Comments.module.css';
 
 function Comments(props) {
   const { eventId } = props;
-
+  const { showNotification } = useContext(NotificationContext);
   const [showComments, setShowComments] = useState(false);
 
   function toggleCommentsHandler() {
@@ -21,21 +22,21 @@ function Comments(props) {
       name: userComment.name,
       text: userComment.text
     };
+
+    showNotification('pending', "Comments", "Sending your comment...");
+
     postUserComment(eventId, toInsertUserComment)
       .then((result) => {
         if (result.ok) {
-          // <<TODO>>  Show/Notify SUCCESS to User
-          console.log('New comment result: Succeeded!');
+          showNotification('success', "Comments", result.greeting);
         }
         else {
-          // <<TODO>> Show/Notify ERROR to User
-          console.error(`[ERROR] Status: ${result.status}. Message:`, result.essence);
+          showNotification('error', "Comments", `${result.essence}`);
         }
       })
       .catch((error) => {
-        // <<TODO>> Show/Notify ERROR to User
         const status = error.code || error.errno || error.syscall || 418;
-        console.error(`[ERROR] Status: ${status}. Message:`, error.message);
+        showNotification('error', "Registration", `Error (${status}): ${error.message}`);
       });
   }
 

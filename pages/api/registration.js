@@ -20,6 +20,7 @@ export default async function handler(req, res) {
   const apiUrl = '/api/registration';
   let operationVerb = '';
   let operationDetails = '';
+  let greetingOnSuccess = 'Welcome! You are now registered. Thank you!';
 
   if (req.method === 'POST') {
     try {
@@ -38,7 +39,6 @@ export default async function handler(req, res) {
         finalItemOrErrorString = {
           ...registrationData,
           date: new Date().toISOString(),
-          welcome: 'Welcome! You are now registered. Thank you!',
         };
       }
 
@@ -46,7 +46,8 @@ export default async function handler(req, res) {
         apiUrl,
         finalItemOrErrorString,
         operationVerb,
-        operationDetails);
+        operationDetails,
+        greetingOnSuccess);
       res.status(status).json(response);
     }
     catch (error) {
