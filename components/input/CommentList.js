@@ -15,6 +15,7 @@ function CommentList(props) {
         if (result.ok) {
           hideNotification();
           setComments(result.essence);
+          props.parentRef.current.scrollIntoView({ behavior: "smooth" });
         }
         else {
           showNotification('error', "Comments", `${result.essence}`);
