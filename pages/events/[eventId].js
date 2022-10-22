@@ -5,7 +5,7 @@ import EventLogistics from '../../components/event-detail/EventLogistics';
 import EventContent from '../../components/event-detail/EventContent';
 import ErrorAlert from '../../components/ui/ErrorAlert';
 import Button from '../../components/ui/Button';
-import Comments from '../../components/input/comments';
+import CommentsSection from '../../components/input/CommentsSection';
 import {
   getFeaturedEvents,
   getFeaturedEventsSync,
@@ -48,7 +48,7 @@ export default function EventDetailPage(props) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
-      <Comments eventId={event.id} />
+      <CommentsSection eventId={event.id} />
     </Fragment>
   );
 }

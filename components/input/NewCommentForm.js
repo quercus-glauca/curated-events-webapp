@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
-import classes from './NewComment.module.css';
+import classes from './NewCommentForm.module.css';
 
-function NewComment(props) {
+function NewCommentForm(props) {
   const [isInvalid, setIsInvalid] = useState(false);
 
   const emailInputRef = useRef();
@@ -57,4 +57,4 @@ function NewComment(props) {
   );
 }
 
-export default NewComment;
+export default NewCommentForm;

@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { NotificationContext } from '../../context/NotificationProvider';
 import CommentList from './CommentList';
-import NewComment from './NewComment';
+import NewCommentForm from './NewCommentForm';
 import { postUserComment } from '../../data/api-client-fetcher';
-import classes from './Comments.module.css';
+import classes from './CommentsSection.module.css';
 
-function Comments(props) {
+function CommentsSection(props) {
   const { eventId } = props;
   const { showNotification } = useContext(NotificationContext);
   const [showComments, setShowComments] = useState(false);
@@ -50,7 +50,7 @@ function Comments(props) {
       <button onClick={toggleCommentsHandler}>
         {showComments ? 'Hide' : 'Show'} Comments
       </button>
-      {showComments && <NewComment
+      {showComments && <NewCommentForm
         onAddComment={addCommentHandler}
       />}
       {showComments && <CommentList
@@ -60,4 +60,4 @@ function Comments(props) {
   );
 }
 
-export default Comments;
+export default CommentsSection;
