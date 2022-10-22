@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { NotificationContext } from '../../context/NotificationProvider';
 import CommentList from './CommentList';
 import NewComment from './NewComment';
@@ -9,6 +9,11 @@ function Comments(props) {
   const { eventId } = props;
   const { showNotification } = useContext(NotificationContext);
   const [showComments, setShowComments] = useState(false);
+  const commentsSectionRef = useRef();
+
+  useEffect(() => {
+    commentsSectionRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [showComments])
 
   function toggleCommentsHandler() {
     setShowComments((prevStatus) => !prevStatus);
@@ -41,7 +46,7 @@ function Comments(props) {
   }
 
   return (
-    <section className={classes.comments}>
+    <section className={classes.comments} ref={commentsSectionRef}>
       <button onClick={toggleCommentsHandler}>
         {showComments ? 'Hide' : 'Show'} Comments
       </button>
