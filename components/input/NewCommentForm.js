@@ -1,12 +1,21 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classes from './NewCommentForm.module.css';
 
 function NewCommentForm(props) {
+  const { onAddComment, updateForm } = props;
   const [isInvalid, setIsInvalid] = useState(false);
 
   const emailInputRef = useRef();
   const nameInputRef = useRef();
   const commentInputRef = useRef();
+
+  useEffect(() => {
+    emailInputRef.current.value = '';
+    nameInputRef.current.value = '';
+    commentInputRef.current.value = '';
+
+  }, [updateForm])
+
 
   function sendCommentHandler(event) {
     event.preventDefault();
@@ -28,7 +37,7 @@ function NewCommentForm(props) {
       return;
     }
 
-    props.onAddComment({
+    onAddComment({
       email: enteredEmail,
       name: enteredName,
       text: enteredComment,

@@ -9,6 +9,7 @@ function CommentsSection(props) {
   const { eventId } = props;
   const { showNotification } = useContext(NotificationContext);
   const [showComments, setShowComments] = useState(false);
+  const [updateSection, setUpdateSection] = useState(0);
   const commentsSectionRef = useRef();
 
   useEffect(() => {
@@ -34,6 +35,7 @@ function CommentsSection(props) {
       .then((result) => {
         if (result.ok) {
           showNotification('success', "Comments", result.greeting);
+          setUpdateSection((prevStatus) => (prevStatus + 1));
         }
         else {
           showNotification('error', "Comments", `${result.essence}`);
@@ -52,6 +54,7 @@ function CommentsSection(props) {
       </button>
       {showComments && <NewCommentForm
         onAddComment={addCommentHandler}
+        updateForm={updateSection}
       />}
       {showComments && <CommentList
         eventId={eventId}
