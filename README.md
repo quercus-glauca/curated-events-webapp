@@ -1,6 +1,6 @@
-# Curated Events Application
+# Curated Events Webapp
 
-The **Curated Events Application** is an Exercise Project developed in React/Next and native MongoDB. It's a free version as a student of parts of the course “**Next.js & React - The Complete Guide (incl. Two Paths!)**”, by Maximilian Schwarzmüller (AWS certified, Professional Web Developer and Instructor), from Udemy Inc.
+The **Curated Events Webapp** is an Exercise Project developed in React/Next and native MongoDB. It's a free implementation as a student of parts of the course “**Next.js & React - The Complete Guide (incl. Two Paths!)**”, by Maximilian Schwarzmüller (AWS certified, Professional Web Developer and Instructor), from Udemy Inc.
 
 
 ### Done with 💖 by **Quercus Glauca** 😊

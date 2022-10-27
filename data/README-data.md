@@ -2,7 +2,7 @@
 
 ## Server-side data providers
 
-The `data/providers` directory contains the various server-side **data providers** that get access to the different **data categories** used by the application. They can be alternativelly selected at _build time_ with the corresponding **environment variable**, namely:
+The `data/providers` directory contains the various server-side **data providers** which manage and get access to the different **data categories** used by the application. They can be alternativelly selected at _build time_ with the corresponding **environment variable**, namely:
 
 - `EVENTS_PROVIDER=""`
 - `COMMENTS_PROVIDER=""`
