@@ -9,26 +9,26 @@ import {
   getUserComments as dummy_getUserComments,
   postUserComment as dummy_postUserComment,
   deleteUserComment as dummy_deleteUserComment,
-} from './dummy-data-provider';
+} from './dummy';
 
 import {
   getUserComments as fs_getUserComments,
   postUserComment as fs_postUserComment,
   deleteUserComment as fs_deleteUserComment,
-} from './fs-data-provider';
+} from './filesystem';
 
 import {
   getAllEvents as firebase_getAllEvents,
   getFeaturedEvents as firebase_getFeaturedEvents,
   getFilteredEvents as firebase_getFilteredEvents,
   getEventById as firebase_getEventById,
-} from './firebase-data-provider';
+} from './firebase';
 
 import {
   getUserComments as mongodb_getUserComments,
   postUserComment as mongodb_postUserComment,
   deleteUserComment as mongodb_deleteUserComment,
-} from './mongodb-data-provider';
+} from './mongodb';
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

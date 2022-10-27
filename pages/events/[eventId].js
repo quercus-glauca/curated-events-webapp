@@ -11,7 +11,7 @@ import {
   getFeaturedEventsSync,
   getEventById,
   getEventByIdSync
-} from "../../data/server-data-provider";
+} from "../../data/providers";
 
 export default function EventDetailPage(props) {
   const isLoading = !('done' in props);

@@ -4,7 +4,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const userCommentsFilename = path.join(process.cwd(), 'data', 'fs-data-comments.json');
+const userCommentsFilename = path.join(process.cwd(),
+  'content', 'comments', 'user-comments.json');
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § UserComments : SYNC Backend Implementation

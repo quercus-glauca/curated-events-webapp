@@ -8,11 +8,11 @@ import {
   postUserCommentSync,
   deleteUserComment,
   deleteUserCommentSync,
-} from '../../../data/server-data-provider';
+} from '../../../data/providers';
 
 import {
   validateUserComment
-} from '../../../helpers/comments-data-helper';
+} from '../../../lib/validate/input-data';
 
 import {
   buildGetResponse,
@@ -20,7 +20,7 @@ import {
   buildDeleteResponse,
   buildMethodNotAllowed,
   buildErrorResponse
-} from '../../../helpers/api-response-helper';
+} from '../../../lib/api/response-helper';
 
 
 export default async function handler(req, res) {

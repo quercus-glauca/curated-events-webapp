@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import Head from 'next/head';
 import NewsletterRegistration from '../components/input/NewsletterRegistration';
 import EventList from "../components/events/EventList";
-import { getFeaturedEvents, getFeaturedEventsSync } from "../data/server-data-provider";
+import { getFeaturedEvents, getFeaturedEventsSync } from "../data/providers";
 
 export default function HomePage(props) {
   const { featuredEvents } = props;

@@ -5,7 +5,7 @@ import EventList from '../../../components/events/EventList';
 import ResultsTitle from '../../../components/ui/ResultsTitle';
 import ErrorAlert from '../../../components/ui/ErrorAlert';
 import Button from '../../../components/ui/Button';
-import { getFilteredEvents } from "../../../helpers/events-data-helper";
+import { getFilteredEvents } from "../../../lib/helpers/events";
 
 export default function FilteredEventsPage() {
   const [isLoading, setIsLoading] = useState(true);
