@@ -8,7 +8,7 @@
 const DUMMY_EVENTS = [
   {
     data: {
-      id: 'e1',
+      id: 'programming-for-everyone',
       title: 'Programming for everyone',
       description:
         'Everyone can learn to code! Yes, everyone! In this live event, we are going to go through all the key basics and get you started with programming as well.',
@@ -21,7 +21,7 @@ const DUMMY_EVENTS = [
   },
   {
     data: {
-      id: 'e2',
+      id: 'networking-for-introverts',
       title: 'Networking for introverts',
       description:
         "We know: Networking is no fun if you are an introvert person. That's why we came up with this event - it'll be so much easier. Promised!",
@@ -34,7 +34,7 @@ const DUMMY_EVENTS = [
   },
   {
     data: {
-      id: 'e3',
+      id: 'networking-for-extroverts',
       title: 'Networking for extroverts',
       description:
         'You probably need no help with networking in general. But focusing your energy correctly - that is something where most people can improve.',

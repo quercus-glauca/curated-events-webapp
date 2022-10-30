@@ -42,16 +42,19 @@ const simpleEvent = {
 
 Now, we are introducing the **File system** data provider to also manage EVENTS. During this process, we will convert this type from JavaScript *objects* to Markdown *files* (and not JSON *files*!), because we are going to add **full rich-text content** to the EVENTS.
 
-So,
+This way, `simpleEvent` will become the event **metadata**, conveyed by the Markdown *gray-matter* `data` object.
 
-- `sampleEvent` will become the event **metadata**, conveyed by the Markdown *gray-matter* `data` object.
-- `sampleEvent.id` will become the **filename** for the corresponding local `*.md` file, located in the `content/events` directory.
+- The local `*.md` file will be located in the `content/events` directory.
+- The **filename** will be derived from the new `postEvent.data.title` in a sort of simplified kebab-case.
+- The old `simpleEvent.id` field, which used to contain 'e1, 'e2', etc. will be replaced by `postEvent.data.id`, which will contain the **filename**.
 
 The Markdown *content* `content` object will convey the new **full rich-text content** of the events, coverted this way into a full rich-text EVENT-POST:
 
 ```js
 const eventPost = {
-  data: { ...simpleEvent },
+  data: { 
+    ...simpleEvent
+  },
   content: "MD Formatted Content"
 };
 ```

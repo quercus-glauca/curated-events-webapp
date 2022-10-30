@@ -19,5 +19,5 @@ The Validation Data Helpers provide several input data validation patterns for e
 
 ### List of Files
 
-- `events.js`: <ℹ> This Helper exposes some legacy code from the first development steps.
+- `events.js`: <ℹ> This Helper exposes some utility functions and some legacy code from the first development steps.
 
