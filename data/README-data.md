@@ -50,9 +50,9 @@ So,
 The Markdown *content* `content` object will convey the new **full rich-text content** of the events, coverted this way into a full rich-text EVENT-POST:
 
 ```js
-const eventPost {
-  eventData: { ...simpleEvent },
-  eventContent: "MD Formatted Content"
+const eventPost = {
+  data: { ...simpleEvent },
+  content: "MD Formatted Content"
 };
 ```
 

@@ -12,6 +12,10 @@ import {
 } from './dummy';
 
 import {
+  getAllEvents as fs_getAllEvents,
+  getFeaturedEvents as fs_getFeaturedEvents,
+  getFilteredEvents as fs_getFilteredEvents,
+  getEventById as fs_getEventById,
   getUserComments as fs_getUserComments,
   postUserComment as fs_postUserComment,
   deleteUserComment as fs_deleteUserComment,
@@ -44,7 +48,7 @@ const sampleRegistrationData = {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SAMPLE DATA § Events
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const sampleEvent = {
+const simpleEvent = {
   id: 'e1',
   title: 'Programming for everyone',
   description:
@@ -53,6 +57,11 @@ const sampleEvent = {
   date: '2021-05-12',
   image: 'images/coding-event.jpg',
   isFeatured: false,
+};
+
+const eventPost = {
+  eventData: { ...simpleEvent },
+  eventContent: "MD Formatted Content"
 };
 
 
@@ -81,6 +90,9 @@ export function getAllEventsSync() {
   if (process.env.EVENTS_PROVIDER === "dummy") {
     return dummy_getAllEvents();
   }
+  else if (process.env.EVENTS_PROVIDER === "fs") {
+    return fs_getAllEvents();
+  }
   console.assert(false, 'Configuration Failure!');
   return null;
 }
@@ -88,6 +100,9 @@ export function getAllEventsSync() {
 export function getFeaturedEventsSync() {
   if (process.env.EVENTS_PROVIDER === "dummy") {
     return dummy_getFeaturedEvents();
+  }
+  else if (process.env.EVENTS_PROVIDER === "fs") {
+    return fs_getFeaturedEvents();
   }
   console.assert(false, 'Configuration Failure!');
   return null;
@@ -97,6 +112,9 @@ export function getFilteredEventsSync(dateFilter) {
   if (process.env.EVENTS_PROVIDER === "dummy") {
     return dummy_getFilteredEvents(dateFilter);
   }
+  else if (process.env.EVENTS_PROVIDER === "fs") {
+    return fs_getFilteredEvents(dateFilter);
+  }
   console.assert(false, 'Configuration Failure!');
   return null;
 }
@@ -104,6 +122,9 @@ export function getFilteredEventsSync(dateFilter) {
 export function getEventByIdSync(id) {
   if (process.env.EVENTS_PROVIDER === "dummy") {
     return dummy_getEventById(id);
+  }
+  else if (process.env.EVENTS_PROVIDER === "fs") {
+    return fs_getEventById(id);
   }
   console.assert(false, 'Configuration Failure!');
   return null;

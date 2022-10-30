@@ -13,7 +13,7 @@ const firebaseURL = process.env.FIREBASE_URL;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export async function getAllEvents() {
   let response = await fetch(firebaseURL);
-  console.debug('[SVR] GET Response Status:', response.status, response.statusText);
+  console.debug('[SRV] GET Response Status:', response.status, response.statusText);
   if (response.status !== 200) {
     return [];
   }
@@ -28,7 +28,7 @@ export async function getAllEvents() {
     allEvents.push(event);
   });
 
-  console.debug('[SVR]:', allEvents.length, 'Entries Fetched');
+  console.debug('[SRV]:', allEvents.length, 'Events Found');
   return allEvents;
 }
 
@@ -44,7 +44,7 @@ export async function getFeaturedEvents() {
 
 function _getFeaturedEvents(events) {
   const filteredEvents = events.filter((event) => event.isFeatured);
-  console.debug('[SVR] Helper:', filteredEvents.length, '"Featured" Events');
+  console.debug('[SRV]:', filteredEvents.length, '"Featured" Events');
 
   return filteredEvents;
 }
@@ -66,7 +66,7 @@ function _getFilteredEvents(events, dateFilter) {
     const eventDate = new Date(event.date);
     return eventDate.getFullYear() === year && eventDate.getMonth() === month - 1;
   });
-  console.debug('[SVR] Helper:', filteredEvents.length, '"Filtered" Events');
+  console.debug('[SRV]:', filteredEvents.length, '"Filtered" Events');
 
   return filteredEvents;
 }
@@ -84,10 +84,10 @@ export async function getEventById(id) {
 function _getEventById(events, id) {
   const event = events.find((event) => event.id === id);
   if (!event) {
-    console.debug('[SVR] Helper: Event', id, 'Not Found!');
+    console.debug('[SRV]: Event', id, 'Not Found!');
   }
   else {
-    console.debug('[SVR] Helper: Event', id, 'Found');
+    console.debug('[SRV]: Event', id, 'Found');
   }
   return event;
 }
@@ -105,12 +105,12 @@ export async function postSingleEvent({ id, title, description, location, date, 
       "Content-Type": "application/json",
     },
   });
-  console.debug('[SVR] POST Response Status:', response.status, response.statusText);
+  console.debug('[SRV] POST Response Status:', response.status, response.statusText);
   if (response.status !== 200) {
     return false;
   }
 
   let data = await response.json();
-  console.debug('[SVR] POST Response Data:', data);
+  console.debug('[SRV] POST Response Data:', data);
   return true;
 }

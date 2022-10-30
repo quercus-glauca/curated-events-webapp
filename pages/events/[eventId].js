@@ -19,8 +19,8 @@ export default function EventDetailPage(props) {
     return <ErrorAlert loading><p>Loading...</p></ErrorAlert>;
   }
 
-  const { eventId, event } = props;
-  if (!event) {
+  const { eventId, eventPost } = props;
+  if (!eventPost) {
     return (
       <Fragment>
         <ErrorAlert><p>No event found!<br />Unknown '{eventId}' id.</p></ErrorAlert>
@@ -34,30 +34,30 @@ export default function EventDetailPage(props) {
   return (
     <Fragment>
       <Head>
-        <title>{event.title}</title>
-        <meta name="description" content={event.description}
+        <title>{eventPost.data.title}</title>
+        <meta name="description" content={eventPost.data.description}
         />
       </Head>
-      <EventSummary title={event.title} />
+      <EventSummary title={eventPost.data.title} />
       <EventLogistics
-        date={event.date}
-        address={event.location}
-        image={event.image}
-        imageAlt={event.title}
+        date={eventPost.data.date}
+        address={eventPost.data.location}
+        image={eventPost.data.image}
+        imageAlt={eventPost.data.title}
       />
       <EventContent>
-        <p>{event.description}</p>
+        <p>{eventPost.data.description}</p>
       </EventContent>
-      <CommentsSection eventId={event.id} />
+      <CommentsSection eventId={eventPost.data.id} />
     </Fragment>
   );
 }
 
 export async function getStaticProps(context) {
   const { params } = context;
-  let { eventId, event } = params;
-  if (!event) {
-    event = process.env.EVENTS_PROVIDER_SYNC
+  let { eventId, eventPost } = params;
+  if (!eventPost) {
+    eventPost = process.env.EVENTS_PROVIDER_SYNC
       ? getEventByIdSync(eventId)
       : await getEventById(eventId);
   }
@@ -66,7 +66,7 @@ export async function getStaticProps(context) {
     props: {
       done: true,
       eventId: eventId,
-      event: event,
+      eventPost: eventPost,
     },
     revalidate: 30,
   };
@@ -79,8 +79,8 @@ export async function getStaticPaths() {
 
   const featuredParams = featuredEvents.map((event) => ({
     params: {
-      eventId: event.id,
-      event: event
+      eventId: event.data.id,
+      eventPost: event
     },
   }));
 

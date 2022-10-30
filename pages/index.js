@@ -6,6 +6,7 @@ import { getFeaturedEvents, getFeaturedEventsSync } from "../data/providers";
 
 export default function HomePage(props) {
   const { featuredEvents } = props;
+
   return (
     <Fragment>
       <Head>
