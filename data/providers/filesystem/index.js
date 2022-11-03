@@ -3,6 +3,15 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import fs from 'fs';
 import path from 'path';
+import {
+  isEventFeatured,
+  isEventFiltered,
+  isEventId,
+  readEventPost
+} from 'lib/helpers/events';
+
+const eventsDirectory = path.join(process.cwd(),
+  'content', 'events');
 
 const userCommentsFilename = path.join(process.cwd(),
   'content', 'comments', 'user-comments.json');
@@ -17,9 +26,18 @@ const userCommentsFilename = path.join(process.cwd(),
 export function getAllEvents() {
   const allEvents = [];
 
-  // <<TODO>>
+  const filenames = fs.readdirSync(eventsDirectory);
+  filenames.forEach(filename => {
+    if (path.extname(filename).toLowerCase() === '.md') {
+      const eventFilePath = path.join(eventsDirectory, filename);
+      const eventPost = readEventPost(eventFilePath);
+      allEvents.push(eventPost);
+    }
+  });
 
-  console.debug('[SRV]:', allEvents.length, 'Events Found');
+  allEvents.sort((a, b) => a.data.date - b.data.date);
+
+  console.debug(`[SRV] Found ${allEvents.length} Events`);
   return allEvents;
 }
 
@@ -29,9 +47,20 @@ export function getAllEvents() {
 export function getFeaturedEvents() {
   const filteredEvents = [];
 
-  // <<TODO>>
+  const filenames = fs.readdirSync(eventsDirectory);
+  filenames.forEach(filename => {
+    if (path.extname(filename).toLowerCase() === '.md') {
+      const eventFilePath = path.join(eventsDirectory, filename);
+      const eventPost = readEventPost(eventFilePath);
+      if (isEventFeatured(eventPost)) {
+        filteredEvents.push(eventPost);
+      }
+    }
+  });
 
-  console.debug('[SRV]:', filteredEvents.length, '"Featured" Events');
+  filteredEvents.sort((a, b) => a.data.date - b.data.date);
+
+  console.debug(`[SRV] Found ${filteredEvents.length} "Featured" Events`);
   return filteredEvents;
 }
 
@@ -41,9 +70,20 @@ export function getFeaturedEvents() {
 export function getFilteredEvents(dateFilter) {
   const filteredEvents = [];
 
-  // <<TODO>>
+  const filenames = fs.readdirSync(eventsDirectory);
+  filenames.forEach(filename => {
+    if (path.extname(filename).toLowerCase() === '.md') {
+      const eventFilePath = path.join(eventsDirectory, filename);
+      const eventPost = readEventPost(eventFilePath);
+      if (isEventFiltered(eventPost, dateFilter)) {
+        filteredEvents.push(eventPost);
+      }
+    }
+  });
 
-  console.debug('[SRV]:', filteredEvents.length, '"Filtered" Events');
+  filteredEvents.sort((a, b) => a.data.date - b.data.date);
+
+  console.debug(`[SRV] Found ${filteredEvents.length} "Filtered" Events`);
   return filteredEvents;
 }
 
@@ -51,15 +91,25 @@ export function getFilteredEvents(dateFilter) {
 // Find a single 'event'
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export function getEventById(id) {
-  const event = null;
+  let event = null;
 
-  // <<TODO>>
+  const filenames = fs.readdirSync(eventsDirectory);
+  filenames.forEach(filename => {
+    if (path.extname(filename).toLowerCase() === '.md') {
+      const eventFilename = path.basename(filename, path.extname(filename));
+      if (eventFilename.toLowerCase() === id.toLowerCase()) {
+        const eventFilePath = path.join(eventsDirectory, filename);
+        const eventPost = readEventPost(eventFilePath);
+        event = eventPost;
+      }
+    }
+  });
 
   if (!event) {
-    console.debug('[SRV]: Event', id, 'Not Found!');
+    console.debug(`[SRV] Event '${id}' Not Found!`);
   }
   else {
-    console.debug('[SRV]: Event', id, 'Found');
+    console.debug(`[SRV] Found '${id}' Event`);
   }
   return event;
 }
