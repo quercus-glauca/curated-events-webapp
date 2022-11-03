@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
-import Button from '../ui/button';
+import Button from 'ui/button';
 import classes from './ResultsTitle.module.css';
 
 function ResultsTitle(props) {

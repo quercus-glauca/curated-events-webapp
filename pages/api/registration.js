@@ -3,7 +3,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import {
   validateRegistrationData
-} from '../../lib/validate/input-data';
+} from 'lib/validate/input-data';
 
 import {
   buildGetResponse,
@@ -11,7 +11,7 @@ import {
   buildDeleteResponse,
   buildMethodNotAllowed,
   buildErrorResponse
-} from '../../lib/api/response-helper';
+} from 'lib/api/response-helper';
 
 
 export default async function handler(req, res) {

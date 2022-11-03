@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import Head from 'next/head';
 import { useRouter } from "next/router";
-import EventsSearch from "../../components/events/EventsSearch";
-import EventList from "../../components/events/EventList";
-import { getAllEvents, getAllEventsSync } from "../../data/providers";
+import EventsSearch from "components/events/EventsSearch";
+import EventList from "components/events/EventList";
+import { getAllEvents, getAllEventsSync } from "data/providers";
 
 export default function AllEventsPage(props) {
   const { allEvents } = props;

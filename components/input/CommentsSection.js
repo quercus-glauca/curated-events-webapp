@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { NotificationContext } from '../../context/NotificationProvider';
+import { NotificationContext } from 'context/NotificationProvider';
 import CommentList from './CommentList';
 import NewCommentForm from './NewCommentForm';
-import { postUserComment } from '../../lib/api/client-fetcher';
+import { postUserComment } from 'lib/api/client-fetcher';
 import classes from './CommentsSection.module.css';
 
 function CommentsSection(props) {

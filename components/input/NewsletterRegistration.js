@@ -1,6 +1,6 @@
 import { useContext, useRef } from 'react';
-import { NotificationContext } from '../../context/NotificationProvider';
-import { postRegistrationData } from '../../lib/api/client-fetcher';
+import { NotificationContext } from 'context/NotificationProvider';
+import { postRegistrationData } from 'lib/api/client-fetcher';
 import classes from './NewsletterRegistration.module.css';
 
 function NewsletterRegistration() {

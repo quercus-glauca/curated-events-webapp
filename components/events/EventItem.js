@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import Button from '../ui/Button';
+import Button from 'components/ui/Button';
+import DateIcon from 'components/icons/DateIcon';
+import AddressIcon from 'components/icons/AddressIcon';
+import ArrowRightIcon from 'components/icons/ArrowRightIcon';
 import classes from './EventItem.module.css';
-import DateIcon from '../icons/DateIcon';
-import AddressIcon from '../icons/AddressIcon';
-import ArrowRightIcon from '../icons/ArrowRightIcon';
 
 export default function EventItem(props) {
   const { id, title, location, date, image } = props;

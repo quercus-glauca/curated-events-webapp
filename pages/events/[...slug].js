@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
-import EventList from '../../components/events/EventList';
-import ResultsTitle from '../../components/ui/ResultsTitle';
-import ErrorAlert from '../../components/ui/ErrorAlert';
-import Button from '../../components/ui/Button';
-import { getFilteredEvents, getFilteredEventsSync } from "../../data/providers";
+import EventList from 'components/events/EventList';
+import ResultsTitle from 'components/ui/ResultsTitle';
+import ErrorAlert from 'components/ui/ErrorAlert';
+import Button from 'components/ui/Button';
+import { getFilteredEvents, getFilteredEventsSync } from "data/providers";
 
 export default function FilteredEventsPage(props) {
   const isLoading = !('done' in props);

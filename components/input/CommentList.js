@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
-import { NotificationContext } from '../../context/NotificationProvider';
-import { getUserComments } from '../../lib/api/client-fetcher';
+import { NotificationContext } from 'context/NotificationProvider';
+import { getUserComments } from 'lib/api/client-fetcher';
 import classes from './CommentList.module.css';
 
 const delayToLoadInSeconds = 4;
