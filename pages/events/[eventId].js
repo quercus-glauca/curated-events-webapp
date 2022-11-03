@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
-import EventSummary from 'components/event-detail/EventSummary';
+import EventSummary from 'components/event-detail/EventTitle';
 import EventLogistics from 'components/event-detail/EventLogistics';
 import EventContent from 'components/event-detail/EventContent';
 import ErrorAlert from 'components/ui/ErrorAlert';
