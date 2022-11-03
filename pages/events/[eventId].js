@@ -1,17 +1,17 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
-import EventSummary from '../../components/event-detail/EventSummary';
-import EventLogistics from '../../components/event-detail/EventLogistics';
-import EventContent from '../../components/event-detail/EventContent';
-import ErrorAlert from '../../components/ui/ErrorAlert';
-import Button from '../../components/ui/Button';
-import CommentsSection from '../../components/input/CommentsSection';
+import EventSummary from 'components/event-detail/EventSummary';
+import EventLogistics from 'components/event-detail/EventLogistics';
+import EventContent from 'components/event-detail/EventContent';
+import ErrorAlert from 'components/ui/ErrorAlert';
+import Button from 'components/ui/Button';
+import CommentsSection from 'components/input/CommentsSection';
 import {
   getFeaturedEvents,
   getFeaturedEventsSync,
   getEventById,
   getEventByIdSync
-} from "../../data/providers";
+} from "data/providers";
 
 export default function EventDetailPage(props) {
   const isLoading = !('done' in props);
@@ -45,9 +45,10 @@ export default function EventDetailPage(props) {
         image={eventPost.data.image}
         imageAlt={eventPost.data.title}
       />
-      <EventContent>
-        <p>{eventPost.data.description}</p>
-      </EventContent>
+      <EventContent
+        summary={eventPost.data.description}
+        content={eventPost.content}
+      />
       <CommentsSection eventId={eventPost.data.id} />
     </Fragment>
   );
