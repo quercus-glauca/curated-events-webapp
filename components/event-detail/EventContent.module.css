@@ -18,3 +18,22 @@
   margin-top: 3rem;
   padding: 2rem 3rem;
 }
+
+.content a {
+  text-decoration: none;
+  color: #03be9f;
+}
+
+.content a:hover,
+.content a:active {
+  color: #74dacc;
+}
+
+.content ul {
+  list-style-type: circle;
+  padding: 0 0 0 2.5rem;
+}
+
+.content li {
+  padding: 0.5rem 0;
+}
