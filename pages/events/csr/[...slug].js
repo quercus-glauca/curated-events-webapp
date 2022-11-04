@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import EventList from '../../../components/events/EventList';
 import ResultsTitle from '../../../components/ui/ResultsTitle';
 import ErrorAlert from '../../../components/ui/ErrorAlert';
-import Button from '../../../components/ui/Button';
+import ButtonLink from '../../../components/ui/ButtonLink';
 import { getFilteredEvents } from "../../../lib/helpers/events";
 
 export default function FilteredEventsPage() {
@@ -65,7 +65,7 @@ export default function FilteredEventsPage() {
       <Fragment>
         <ErrorAlert><p>Invalid input data: {JSON.stringify(rawSlug)}<br />Please, adjust your values...</p></ErrorAlert>
         <div className='center'>
-          <Button toLink='/events'>Show All Events</Button>
+          <ButtonLink toLink='/events'>Show All Events</ButtonLink>
         </div>
       </Fragment>
     );
@@ -77,7 +77,7 @@ export default function FilteredEventsPage() {
       <Fragment>
         <ErrorAlert><p>No events found for the chosen filter!</p></ErrorAlert>
         <div className='center'>
-          <Button toLink='/events'>Show All Events</Button>
+          <ButtonLink toLink='/events'>Show All Events</ButtonLink>
         </div>
       </Fragment>
     );

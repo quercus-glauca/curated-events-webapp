@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import EventList from 'components/events/EventList';
 import ResultsTitle from 'components/ui/ResultsTitle';
 import ErrorAlert from 'components/ui/ErrorAlert';
-import Button from 'components/ui/Button';
+import ButtonLink from 'components/ui/ButtonLink';
 import { getFilteredEvents, getFilteredEventsSync } from "data/providers";
 
 export default function FilteredEventsPage(props) {
@@ -17,7 +17,7 @@ export default function FilteredEventsPage(props) {
       <Fragment>
         <ErrorAlert><p>Invalid input data: {JSON.stringify(rawSlug)}<br />Please, adjust your values...</p></ErrorAlert>
         <div className='center'>
-          <Button toLink='/events'>Show All Events</Button>
+          <ButtonLink toLink='/events'>Show All Events</ButtonLink>
         </div>
       </Fragment>
     );
@@ -27,7 +27,7 @@ export default function FilteredEventsPage(props) {
       <Fragment>
         <ErrorAlert><p>No events found for the chosen filter!</p></ErrorAlert>
         <div className='center'>
-          <Button toLink='/events'>Show All Events</Button>
+          <ButtonLink toLink='/events'>Show All Events</ButtonLink>
         </div>
       </Fragment>
     );

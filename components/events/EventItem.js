@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Button from 'components/ui/Button';
+import ButtonLink from 'components/ui/ButtonLink';
 import DateIcon from 'components/icons/DateIcon';
 import AddressIcon from 'components/icons/AddressIcon';
 import ArrowRightIcon from 'components/icons/ArrowRightIcon';
@@ -28,10 +28,10 @@ export default function EventItem(props) {
           </div>
         </div>
         <div className={classes.actions}>
-          <Button toLink={toEventItem}>
+          <ButtonLink toLink={toEventItem}>
             <span>Explore Event</span>
             <span className={classes.icon}><ArrowRightIcon /></span>
-          </Button>
+          </ButtonLink>
         </div>
       </div>
     </li>

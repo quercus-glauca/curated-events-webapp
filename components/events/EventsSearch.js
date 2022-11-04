@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import Button from 'components/ui/Button';
+import ButtonLink from 'components/ui/ButtonLink';
 import classes from './EventsSearch.module.css';
 
 export default function EventsSearch(props) {
@@ -43,7 +43,7 @@ export default function EventsSearch(props) {
           </select>
         </div>
       </div>
-      <Button>Find Events</Button>
+      <ButtonLink>Find Events</ButtonLink>
     </form>
   );
 }

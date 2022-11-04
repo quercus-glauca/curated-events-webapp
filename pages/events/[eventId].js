@@ -4,7 +4,7 @@ import EventSummary from 'components/event-detail/EventTitle';
 import EventLogistics from 'components/event-detail/EventLogistics';
 import EventContent from 'components/event-detail/EventContent';
 import ErrorAlert from 'components/ui/ErrorAlert';
-import Button from 'components/ui/Button';
+import ButtonLink from 'components/ui/ButtonLink';
 import CommentsSection from 'components/input/CommentsSection';
 import {
   getFeaturedEvents,
@@ -25,7 +25,7 @@ export default function EventDetailPage(props) {
       <Fragment>
         <ErrorAlert><p>No event found!<br />Unknown '{eventId}' id.</p></ErrorAlert>
         <div className='center'>
-          <Button toLink='/events'>Show All Events</Button>
+          <ButtonLink toLink='/events'>Show All Events</ButtonLink>
         </div>
       </Fragment>
     );

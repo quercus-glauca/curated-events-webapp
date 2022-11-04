@@ -1,15 +1,13 @@
 import Link from 'next/link';
-import classes from './Button.module.css';
+import classes from './ButtonLink.module.css';
 
-export default function Button(props) {
+export default function ButtonLink(props) {
   const { toLink } = props;
 
   if (toLink) {
     return (
-      <Link href={toLink}>
-        <a className={classes.btn}>
-          {props.children}
-        </a>
+      <Link className={classes.btn} href={toLink}>
+        {props.children}
       </Link>
     );
   }

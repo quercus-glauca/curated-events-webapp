@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
-import Button from 'ui/button';
+import ButtonLink from 'ui/button';
 import classes from './ResultsTitle.module.css';
 
 function ResultsTitle(props) {
@@ -18,7 +18,7 @@ function ResultsTitle(props) {
       </Head>
       <section className={classes.title}>
         <h1>Events in {humanReadableDate}</h1>
-        <Button toLink='/events'>Show all events</Button>
+        <ButtonLink toLink='/events'>Show all events</ButtonLink>
       </section>
     </Fragment>
   );
