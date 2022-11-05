@@ -11,7 +11,17 @@ function EventContent(props) {
         {summary}
       </section>
       <section className={classes.content}>
-        <Markdown>{content}</Markdown>
+        <Markdown
+          children={content}
+          components={{
+            ul: ({ node, ...props }) => {
+              return <ul className={classes.listNode} {...props} />
+            },
+            li: ({ node, ...props }) => {
+              return <li className={classes.listItem} {...props} />
+            },
+          }}
+        />
       </section>
     </Fragment>
   );

@@ -29,11 +29,11 @@
   color: #74dacc;
 }
 
-.content ul {
+.listNode {
   list-style-type: circle;
   padding: 0 0 0 2.5rem;
 }
 
-.content li {
+.listItem {
   padding: 0.5rem 0;
 }
