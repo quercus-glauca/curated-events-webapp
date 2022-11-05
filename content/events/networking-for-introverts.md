@@ -32,7 +32,7 @@ Throughout C++'s life, its development and evolution has been guided by a set of
 
 C++ inherits most of C's syntax. The following is Bjarne Stroustrup's version of the **Hello world program** that uses the **C++ Standard Library** stream facility to write a message to *standard output*:
 
-```c++
+```cpp
 #include <iostream>
 
 int main()
