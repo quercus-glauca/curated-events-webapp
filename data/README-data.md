@@ -35,7 +35,7 @@ const simpleEvent = {
   description: '',
   location: '',
   date: '2021-05-12',
-  image: 'images/coding-event.jpg',
+  image: 'coding-event.jpg',
   isFeatured: false,
 };
 ```

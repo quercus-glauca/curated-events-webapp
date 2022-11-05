@@ -1,14 +1,16 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // FILESYSTEM Data Provider - Backend Server
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import fs from 'fs';
+import * as fs from 'fs';
 import path from 'path';
 import {
   isEventFeatured,
   isEventFiltered,
-  isEventId,
-  readEventPost
+  isEventId
 } from 'lib/helpers/events';
+import {
+  readEventPost
+} from 'lib/helpers/core';
 
 const eventsDirectory = path.join(process.cwd(),
   'content', 'events');

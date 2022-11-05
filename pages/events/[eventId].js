@@ -1,16 +1,15 @@
-import { Fragment } from 'react';
 import Head from 'next/head';
-import EventSummary from 'components/event-detail/EventTitle';
-import EventLogistics from 'components/event-detail/EventLogistics';
+import { Fragment } from 'react';
 import EventContent from 'components/event-detail/EventContent';
-import ErrorAlert from 'components/ui/ErrorAlert';
-import ButtonLink from 'components/ui/ButtonLink';
+import EventLogistics from 'components/event-detail/EventLogistics';
+import EventSummary from 'components/event-detail/EventTitle';
 import CommentsSection from 'components/input/CommentsSection';
+import ButtonLink from 'components/ui/ButtonLink';
+import ErrorAlert from 'components/ui/ErrorAlert';
 import {
-  getFeaturedEvents,
-  getFeaturedEventsSync,
   getEventById,
-  getEventByIdSync
+  getEventByIdSync, getFeaturedEvents,
+  getFeaturedEventsSync
 } from "data/providers";
 
 export default function EventDetailPage(props) {
@@ -40,12 +39,14 @@ export default function EventDetailPage(props) {
       </Head>
       <EventSummary title={eventPost.data.title} />
       <EventLogistics
+        id={eventPost.data.id}
         date={eventPost.data.date}
         address={eventPost.data.location}
         image={eventPost.data.image}
         imageAlt={eventPost.data.title}
       />
       <EventContent
+        id={eventPost.data.id}
         summary={eventPost.data.description}
         content={eventPost.content}
       />
