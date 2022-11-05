@@ -17,7 +17,7 @@ export default function AllEventsPage(props) {
   return (
     <Fragment>
       <Head>
-        <title>All Events</title>
+        <title>Curated Events</title>
       </Head>
       <EventsSearch onFindEvents={handleFindEvents} />
       <EventList listEvents={allEvents} />

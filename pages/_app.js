@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
     <NotificationProvider>
       <Layout>
         <Head>
-          <title>NextJS Events</title>
+          <title>Curated Events</title>
           <meta
             name="description"
             content="Find a lot of great events that allow you to evolve..."

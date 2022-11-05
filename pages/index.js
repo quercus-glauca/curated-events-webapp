@@ -10,7 +10,7 @@ export default function HomePage(props) {
   return (
     <Fragment>
       <Head>
-        <title>NextJS Events</title>
+        <title>Curated Events</title>
       </Head>
       <NewsletterRegistration />
       <EventList listEvents={featuredEvents} />
