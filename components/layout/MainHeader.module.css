@@ -24,6 +24,18 @@
   color: #94fdfd;
 }
 
+.navigation {
+  display: flex;
+}
+
+.navigation div {
+  margin-left: 1.5rem;
+}
+
+.navigation button {
+  margin-top: -0.3rem;
+}
+
 .navigation a {
   text-decoration: none;
   color: #74dacc;

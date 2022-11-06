@@ -2,18 +2,24 @@ import Link from 'next/link';
 import classes from './ButtonLink.module.css';
 
 export default function ButtonLink(props) {
-  const { toLink } = props;
+  const { toLink, small } = props;
+
+  const btnClasses = [];
+  btnClasses.push(classes.btn);
+  if (small) {
+    btnClasses.push(classes.btnSm);
+  }
 
   if (toLink) {
     return (
-      <Link className={classes.btn} href={toLink}>
+      <Link className={btnClasses.join(' ')} href={toLink}>
         {props.children}
       </Link>
     );
   }
 
   return (
-    <button className={classes.btn} onClick={props.onClick}>
+    <button className={btnClasses.join(' ')} onClick={props.onClick}>
       {props.children}
     </button>
   );

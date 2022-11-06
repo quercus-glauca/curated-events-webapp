@@ -3,7 +3,7 @@ import classes from './Notification.module.css';
 
 const delayToHideInSeconds = 7;
 
-function Notification(props) {
+export default function Notification(props) {
   const { status, title, message } = props.notification;
 
   let statusClasses = '';
@@ -38,5 +38,3 @@ function Notification(props) {
     </div>
   );
 }
-
-export default Notification;

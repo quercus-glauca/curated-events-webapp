@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
-import ButtonLink from 'ui/button';
+import ButtonLink from 'components/ui/ButtonLink';
 import classes from './ResultsTitle.module.css';
 
-function ResultsTitle(props) {
+export default function ResultsTitle(props) {
   const { date } = props;
 
   const humanReadableDate = new Date(date).toLocaleDateString('en-US', {
@@ -23,5 +23,3 @@ function ResultsTitle(props) {
     </Fragment>
   );
 }
-
-export default ResultsTitle;

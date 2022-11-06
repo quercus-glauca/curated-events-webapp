@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import Head from 'next/head';
 import classes from './ErrorAlert.module.css';
 
-function ErrorAlert(props) {
+export default function ErrorAlert(props) {
   return (
     <Fragment>
       <Head>
@@ -12,5 +12,3 @@ function ErrorAlert(props) {
     </Fragment>
   );
 }
-
-export default ErrorAlert;
