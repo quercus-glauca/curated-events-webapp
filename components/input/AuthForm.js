@@ -1,13 +1,18 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
+import { NotificationContext } from 'context/NotificationProvider';
+import { postSignupData } from 'lib/api/client-fetcher';
 import classes from './AuthForm.module.css';
 
 export default function AuthForm(props) {
-  const [isInvalid, setIsInvalid] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+  const caption = isLogin ? 'Login' : 'Sign Up';
 
   const emailInputRef = useRef();
   const nameInputRef = useRef();
   const passwordInputRef = useRef();
+
+  const { showNotification } = useContext(NotificationContext);
+
 
   function toggleAuthModeHandler() {
     setIsLogin((prevState) => !prevState);
@@ -20,6 +25,7 @@ export default function AuthForm(props) {
     const enteredName = nameInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
+    // Optional at Frontend: Validate Input
     if (
       !enteredEmail ||
       enteredEmail.trim() === '' ||
@@ -29,17 +35,40 @@ export default function AuthForm(props) {
       !enteredPassword ||
       enteredPassword.trim() === ''
     ) {
-      setIsInvalid(true);
-      // <<TODO>> Notify the user
+      showNotification('error', caption, 'Please enter a valid email address, name and password!')
       return;
     }
 
-    // <<TODO>> Post the auth data
+    const signupData = {
+      email: enteredEmail,
+      name: enteredName,
+      password: enteredPassword
+    }
+    if (isLogin) {
+      // <<TODO>> Post the auth data
+    }
+    else {
+      showNotification('pending', caption, "Sign-up in progress...");
+
+      postSignupData(signupData)
+        .then((result) => {
+          if (result.ok) {
+            showNotification('success', caption, result.greeting);
+          }
+          else {
+            showNotification('error', caption, `${result.essence}`);
+          }
+        })
+        .catch((error) => {
+          const status = error.code || error.errno || error.syscall || 418;
+          showNotification('error', caption, `Error (${status}): ${error.message}`);
+        });
+    }
   }
 
   return (
     <section className={classes.form}>
-      <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
+      <h1>{caption}</h1>
       <form onSubmit={sendAuthDataHandler}>
         <div className={classes.control}>
           <label htmlFor='email'>Your email</label>
