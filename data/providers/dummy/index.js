@@ -72,6 +72,37 @@ export function getEventById(id) {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// DUMMY DATA § SignupData
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let DUMMY_USERS = [
+  {
+    email: 'max@its.me',
+    name: 'Maximilian',
+  },
+  {
+    email: 'angela@its.me',
+    name: 'Angela',
+  },
+  {
+    email: 'severus@its.me',
+    name: 'Severus',
+  },
+];
+
+export function getSignupData(userId) {
+  return DUMMY_USERS[0];
+}
+
+export function postSignupData(userId, signupData) {
+  return signupData;
+}
+
+export function deleteSignupData(userId, signupData) {
+  return signupData;
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DUMMY DATA § UserComments
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 let DUMMY_COMMENTS = [

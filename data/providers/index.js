@@ -6,6 +6,9 @@ import {
   getFeaturedEvents as dummy_getFeaturedEvents,
   getFilteredEvents as dummy_getFilteredEvents,
   getEventById as dummy_getEventById,
+  getSignupData as dummy_getSignupData,
+  postSignupData as dummy_postSignupData,
+  deleteSignupData as dummy_deleteSignupData,
   getUserComments as dummy_getUserComments,
   postUserComment as dummy_postUserComment,
   deleteUserComment as dummy_deleteUserComment,
@@ -29,6 +32,9 @@ import {
 } from './firebase';
 
 import {
+  getSignupData as mongodb_getSignupData,
+  postSignupData as mongodb_postSignupData,
+  deleteSignupData as mongodb_deleteSignupData,
   getUserComments as mongodb_getUserComments,
   postUserComment as mongodb_postUserComment,
   deleteUserComment as mongodb_deleteUserComment,
@@ -42,6 +48,18 @@ const sampleRegistrationData = {
   date: new Date().toISOString(),
   email: '',
   name: '',
+};
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SAMPLE DATA § SignupData
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const sampleSignupData = {
+  _id: '',
+  date: new Date().toISOString(),
+  email: '',
+  name: '',
+  password: '',
 };
 
 
@@ -81,6 +99,75 @@ const sampleUserComment = {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § RegistrationData : <<TODO>> Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § SignupData : SYNC Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export function getSignupDataSync(userId) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_getSignupData(userId);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export function postSignupDataSync(userId, signupData) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_postSignupData(userId, signupData);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export function deleteSignupDataSync(userId, signupData) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_deleteSignupData(userId, signupData);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § SignupData : ASYNC Backend Implementation
+// Return an explicit Promise to let the Client to Synch to the Result
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export async function getSignupData(userId) {
+  if (process.env.USERS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_getSignupData(userId)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export async function postSignupData(userId, signupData) {
+  if (process.env.USERS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_postSignupData(userId, signupData)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+export async function deleteSignupData(userId, signupData) {
+  if (process.env.USERS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_deleteSignupData(userId, signupData)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -223,6 +310,7 @@ export function deleteUserCommentSync(eventId, userComment) {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § UserComments : ASYNC Backend Implementation
+// Return an explicit Promise to let the Client to Synch to the Result
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export async function getUserComments(eventId) {
   if (process.env.COMMENTS_PROVIDER === "mongodb") {

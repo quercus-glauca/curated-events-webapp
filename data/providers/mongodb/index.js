@@ -8,6 +8,7 @@ const mongodbUrl = process.env.MONGODB_LOCALSERVER_URL;
 const curatedEventsDBName = 'curatedEventsDB';
 const curatedEventsCollectionName = 'curatedEvents';
 const userRegistryCollectionName = 'userRegistry';
+const userProfilesCollectionName = 'userProfiles';
 const userCommentsCollectionName = 'userComments';
 
 
@@ -38,6 +39,67 @@ async function closeMongoClient(client) {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § RegistrationData : ASYNC Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// <<TODO>>
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § SignupData : ASYNC Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Find the 'signupData' (userProfile) in the Database Collection
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// <<TODO>>
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Insert the 'signupData' (userProfile) into the Database Collection
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export async function postSignupData(userId, signupData) {
+  let client;
+  let providerResult;
+  try {
+    client = await connectMongoClient();
+    const db = client.db(curatedEventsDBName);
+    const collection = db.collection(userProfilesCollectionName);
+
+    // Check if the user profile already exists
+    const queryFilter = { email: signupData.email };
+    const partialResult = await collection.findOne(queryFilter);
+    if (partialResult !== null) {
+      providerResult = 'The user profile already exists';
+    }
+    else {
+      // Proceed with insertion
+      const insertedSignupData = {
+        _id: new ObjectId(),
+        date: signupData.date || new Date().toISOString(),
+        email: signupData.email,
+        name: signupData.name,
+        password: signupData.password,
+      };
+      const result = await collection.insertOne(insertedSignupData);
+
+      // Check the 'result' and on FAILURE return an Error string
+      // On SUCCESS return the full Document with its final '_id'
+      console.debug('[MONGODB] result:', result);
+      providerResult = (!("acknowledged" in result) || !result.acknowledged)
+        ? 'Failed to insert the user profile into the database collection'
+        : insertedSignupData;
+    }
+
+    await closeMongoClient(client);
+    return providerResult;
+  }
+  catch (error) {
+    console.error('[MONGODB] Error:', error);
+    closeMongoClient(client);
+    throw (error);
+  }
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Delete the 'signupData' (userProfile) from the Database Collection
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // <<TODO>>
 
