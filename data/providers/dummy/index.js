@@ -1,6 +1,18 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DUMMY Data Provider - Backend Server
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export {
+  getAllEvents,
+  getFeaturedEvents,
+  getFilteredEvents,
+  getEventById,
+  getUserProfile,
+  postSignupData,
+  deleteUserProfile,
+  getUserComments,
+  postUserComment,
+  deleteUserComment,
+};
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DUMMY DATA § Events
@@ -47,15 +59,15 @@ const DUMMY_EVENTS = [
   },
 ];
 
-export function getAllEvents() {
+function getAllEvents() {
   return DUMMY_EVENTS;
 }
 
-export function getFeaturedEvents() {
+function getFeaturedEvents() {
   return DUMMY_EVENTS.filter((event) => event.data.isFeatured);
 }
 
-export function getFilteredEvents(dateFilter) {
+function getFilteredEvents(dateFilter) {
   const { year, month } = dateFilter;
 
   let filteredEvents = DUMMY_EVENTS.filter((event) => {
@@ -66,7 +78,7 @@ export function getFilteredEvents(dateFilter) {
   return filteredEvents;
 }
 
-export function getEventById(id) {
+function getEventById(id) {
   return DUMMY_EVENTS.find((event) => event.data.id === id);
 }
 
@@ -89,16 +101,16 @@ let DUMMY_USERS = [
   },
 ];
 
-export function getSignupData(userId) {
+function getUserProfile(userEmail) {
   return DUMMY_USERS[0];
 }
 
-export function postSignupData(userId, signupData) {
+function postSignupData(signupData) {
   return signupData;
 }
 
-export function deleteSignupData(userId, signupData) {
-  return signupData;
+function deleteUserProfile(userEmail) {
+  return true;
 }
 
 
@@ -123,16 +135,16 @@ let DUMMY_COMMENTS = [
   },
 ];
 
-export function getUserComments(eventId) {
+function getUserComments(eventId) {
   return DUMMY_COMMENTS;
 }
 
-export function postUserComment(eventId, userComment) {
+function postUserComment(eventId, userComment) {
   DUMMY_COMMENTS.push(userComment);
   return userComment;
 }
 
-export function deleteUserComment(eventId, userComment) {
+function deleteUserComment(eventId, userComment) {
   DUMMY_COMMENTS = DUMMY_COMMENTS.filter((item) => (
     item.email !== userComment.email ||
     item.name !== userComment.name ||

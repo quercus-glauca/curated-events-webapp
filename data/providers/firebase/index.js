@@ -1,6 +1,13 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // FIREBASE Data Provider - Frontend/Backend Service
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export {
+  getAllEvents,
+  getFeaturedEvents,
+  getFilteredEvents,
+  getEventById,
+  postSingleEvent,
+};
 
 const firebaseURL = process.env.FIREBASE_URL;
 
@@ -11,7 +18,7 @@ const firebaseURL = process.env.FIREBASE_URL;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find all the 'events' in the Database
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function getAllEvents() {
+async function getAllEvents() {
   let response = await fetch(firebaseURL);
   console.debug('[SRV] GET Response Status:', response.status, response.statusText);
   if (response.status !== 200) {
@@ -36,7 +43,7 @@ export async function getAllEvents() {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find the featured 'events' in the Database
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function getFeaturedEvents() {
+async function getFeaturedEvents() {
   const allEvents = await getAllEvents();
   const filteredEvents = _getFeaturedEvents(allEvents);
   return filteredEvents;
@@ -53,7 +60,7 @@ function _getFeaturedEvents(events) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find the filtered 'events' in the Database
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function getFilteredEvents(dateFilter) {
+async function getFilteredEvents(dateFilter) {
   const allEvents = await getAllEvents();
   const filteredEvents = _getFilteredEvents(allEvents, dateFilter);
   return filteredEvents;
@@ -75,7 +82,7 @@ function _getFilteredEvents(events, dateFilter) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find a single 'event' in the Database
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function getEventById(id) {
+async function getEventById(id) {
   const allEvents = await getAllEvents();
   const singleEvent = _getEventById(allEvents, id);
   return singleEvent;
@@ -96,7 +103,7 @@ function _getEventById(events, id) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Post a new 'event' in the configured Database
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function postSingleEvent({ id, title, description, location, date, image, isFeatured }) {
+async function postSingleEvent({ id, title, description, location, date, image, isFeatured }) {
   const entry = { id, title, description, location, date, image, isFeatured };
   let response = await fetch(firebaseURL, {
     method: 'POST',

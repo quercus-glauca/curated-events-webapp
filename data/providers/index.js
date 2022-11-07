@@ -6,9 +6,9 @@ import {
   getFeaturedEvents as dummy_getFeaturedEvents,
   getFilteredEvents as dummy_getFilteredEvents,
   getEventById as dummy_getEventById,
-  getSignupData as dummy_getSignupData,
+  getUserProfile as dummy_getUserProfile,
   postSignupData as dummy_postSignupData,
-  deleteSignupData as dummy_deleteSignupData,
+  deleteUserProfile as dummy_deleteUserProfile,
   getUserComments as dummy_getUserComments,
   postUserComment as dummy_postUserComment,
   deleteUserComment as dummy_deleteUserComment,
@@ -32,41 +32,42 @@ import {
 } from './firebase';
 
 import {
-  getSignupData as mongodb_getSignupData,
+  getUserProfile as mongodb_getUserProfile,
   postSignupData as mongodb_postSignupData,
-  deleteSignupData as mongodb_deleteSignupData,
+  deleteUserProfile as mongodb_deleteUserProfile,
   getUserComments as mongodb_getUserComments,
   postUserComment as mongodb_postUserComment,
   deleteUserComment as mongodb_deleteUserComment,
 } from './mongodb';
 
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// SAMPLE DATA § RegistrationData
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const sampleRegistrationData = {
-  date: new Date().toISOString(),
-  email: '',
-  name: '',
-};
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// SAMPLE DATA § SignupData
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const sampleSignupData = {
-  _id: '',
-  date: new Date().toISOString(),
-  email: '',
-  name: '',
-  password: '',
+export {
+  getAllEvents,
+  getAllEventsSync,
+  getFeaturedEvents,
+  getFeaturedEventsSync,
+  getFilteredEvents,
+  getFilteredEventsSync,
+  getEventById,
+  getEventByIdSync,
+  getUserProfile,
+  getUserProfileSync,
+  postSignupData,
+  postSignupDataSync,
+  deleteUserProfile,
+  deleteUserProfileSync,
+  getUserComments,
+  getUserCommentsSync,
+  postUserComment,
+  postUserCommentSync,
+  deleteUserComment,
+  deleteUserCommentSync,
 };
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SAMPLE DATA § Events
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const simpleEvent = {
+const __simpleEvent = {
   id: 'e1',
   title: 'Programming for everyone',
   description:
@@ -77,16 +78,49 @@ const simpleEvent = {
   isFeatured: false,
 };
 
-const eventPost = {
-  eventData: { ...simpleEvent },
+const __eventPost = {
+  eventData: { ...__simpleEvent },
   eventContent: "MD Formatted Content"
+};
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SAMPLE DATA § RegistrationData
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const __registrationData = {
+  date: new Date().toISOString(),
+  email: '',
+  name: '',
+};
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SAMPLE DATA § SignupData
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const __signupData = {
+  email: '',
+  name: '',
+  password: '',    // plain-text
+};
+
+const __userProfile = {
+  _id: '',
+  date: new Date().toISOString(),
+  email: '',
+  name: '',
+  password: '',    // hashed
+};
+
+const __simpleUserProfile = {
+  email: '',
+  name: '',
 };
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // SAMPLE DATA § UserComments
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const sampleUserComment = {
+const __userComment = {
   _id: '',
   eventId: '',
   date: new Date().toISOString(),
@@ -97,83 +131,9 @@ const sampleUserComment = {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// § RegistrationData : <<TODO>> Backend Implementation
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// § SignupData : SYNC Backend Implementation
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function getSignupDataSync(userId) {
-  if (process.env.COMMENTS_PROVIDER === "dummy") {
-    return dummy_getSignupData(userId);
-  }
-  console.assert(false, 'Configuration Failure!');
-  return null;
-}
-
-export function postSignupDataSync(userId, signupData) {
-  if (process.env.COMMENTS_PROVIDER === "dummy") {
-    return dummy_postSignupData(userId, signupData);
-  }
-  console.assert(false, 'Configuration Failure!');
-  return null;
-}
-
-export function deleteSignupDataSync(userId, signupData) {
-  if (process.env.COMMENTS_PROVIDER === "dummy") {
-    return dummy_deleteSignupData(userId, signupData);
-  }
-  console.assert(false, 'Configuration Failure!');
-  return null;
-}
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// § SignupData : ASYNC Backend Implementation
-// Return an explicit Promise to let the Client to Synch to the Result
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function getSignupData(userId) {
-  if (process.env.USERS_PROVIDER === "mongodb") {
-    return new Promise((resolve, reject) => {
-      mongodb_getSignupData(userId)
-        .then((result) => { resolve(result); })
-        .catch((error) => { reject(error); });
-    });
-  }
-  console.assert(false, 'Configuration Failure!');
-  return null;
-}
-
-export async function postSignupData(userId, signupData) {
-  if (process.env.USERS_PROVIDER === "mongodb") {
-    return new Promise((resolve, reject) => {
-      mongodb_postSignupData(userId, signupData)
-        .then((result) => { resolve(result); })
-        .catch((error) => { reject(error); });
-    });
-  }
-  console.assert(false, 'Configuration Failure!');
-  return null;
-}
-
-export async function deleteSignupData(userId, signupData) {
-  if (process.env.USERS_PROVIDER === "mongodb") {
-    return new Promise((resolve, reject) => {
-      mongodb_deleteSignupData(userId, signupData)
-        .then((result) => { resolve(result); })
-        .catch((error) => { reject(error); });
-    });
-  }
-  console.assert(false, 'Configuration Failure!');
-  return null;
-}
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § Events : SYNC Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function getAllEventsSync() {
+function getAllEventsSync() {
   if (process.env.EVENTS_PROVIDER === "dummy") {
     return dummy_getAllEvents();
   }
@@ -184,7 +144,7 @@ export function getAllEventsSync() {
   return null;
 }
 
-export function getFeaturedEventsSync() {
+function getFeaturedEventsSync() {
   if (process.env.EVENTS_PROVIDER === "dummy") {
     return dummy_getFeaturedEvents();
   }
@@ -195,7 +155,7 @@ export function getFeaturedEventsSync() {
   return null;
 }
 
-export function getFilteredEventsSync(dateFilter) {
+function getFilteredEventsSync(dateFilter) {
   if (process.env.EVENTS_PROVIDER === "dummy") {
     return dummy_getFilteredEvents(dateFilter);
   }
@@ -206,7 +166,7 @@ export function getFilteredEventsSync(dateFilter) {
   return null;
 }
 
-export function getEventByIdSync(id) {
+function getEventByIdSync(id) {
   if (process.env.EVENTS_PROVIDER === "dummy") {
     return dummy_getEventById(id);
   }
@@ -222,7 +182,7 @@ export function getEventByIdSync(id) {
 // § Events : ASYNC Backend Implementation
 // Return an explicit Promise to let the Client to Synch to the Result
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function getAllEvents() {
+async function getAllEvents() {
   if (process.env.EVENTS_PROVIDER === "firebase") {
     return new Promise((resolve, reject) => {
       firebase_getAllEvents()
@@ -234,7 +194,7 @@ export async function getAllEvents() {
   return null;
 }
 
-export async function getFeaturedEvents() {
+async function getFeaturedEvents() {
   if (process.env.EVENTS_PROVIDER === "firebase") {
     return new Promise((resolve, reject) => {
       firebase_getFeaturedEvents()
@@ -246,7 +206,7 @@ export async function getFeaturedEvents() {
   return null;
 }
 
-export async function getFilteredEvents(dateFilter) {
+async function getFilteredEvents(dateFilter) {
   if (process.env.EVENTS_PROVIDER === "firebase") {
     return new Promise((resolve, reject) => {
       firebase_getFilteredEvents(dateFilter)
@@ -258,7 +218,7 @@ export async function getFilteredEvents(dateFilter) {
   return null;
 }
 
-export async function getEventById(id) {
+async function getEventById(id) {
   if (process.env.EVENTS_PROVIDER === "firebase") {
     return new Promise((resolve, reject) => {
       firebase_getEventById(id)
@@ -272,9 +232,83 @@ export async function getEventById(id) {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § RegistrationData : <<TODO>> Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § SignupData : SYNC Backend Implementation
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+function getUserProfileSync(userEmail) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_getUserProfile(userEmail);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+function postSignupDataSync(signupData) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_postSignupData(signupData);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+function deleteUserProfileSync(userEmail) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_deleteUserProfile(userEmail);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// § SignupData : ASYNC Backend Implementation
+// Return an explicit Promise to let the Client to Synch to the Result
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+async function getUserProfile(userEmail) {
+  if (process.env.USERS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_getUserProfile(userEmail)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+async function postSignupData(signupData) {
+  if (process.env.USERS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_postSignupData(signupData)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+async function deleteUserProfile(userEmail) {
+  if (process.env.USERS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_deleteUserProfile(userEmail)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § UserComments : SYNC Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function getUserCommentsSync(eventId) {
+function getUserCommentsSync(eventId) {
   if (process.env.COMMENTS_PROVIDER === "dummy") {
     return dummy_getUserComments(eventId);
   }
@@ -285,7 +319,7 @@ export function getUserCommentsSync(eventId) {
   return null;
 }
 
-export function postUserCommentSync(eventId, userComment) {
+function postUserCommentSync(eventId, userComment) {
   if (process.env.COMMENTS_PROVIDER === "dummy") {
     return dummy_postUserComment(eventId, userComment);
   }
@@ -296,7 +330,7 @@ export function postUserCommentSync(eventId, userComment) {
   return null;
 }
 
-export function deleteUserCommentSync(eventId, userComment) {
+function deleteUserCommentSync(eventId, userComment) {
   if (process.env.COMMENTS_PROVIDER === "dummy") {
     return dummy_deleteUserComment(eventId, userComment);
   }
@@ -312,7 +346,7 @@ export function deleteUserCommentSync(eventId, userComment) {
 // § UserComments : ASYNC Backend Implementation
 // Return an explicit Promise to let the Client to Synch to the Result
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function getUserComments(eventId) {
+async function getUserComments(eventId) {
   if (process.env.COMMENTS_PROVIDER === "mongodb") {
     return new Promise((resolve, reject) => {
       mongodb_getUserComments(eventId)
@@ -324,7 +358,7 @@ export async function getUserComments(eventId) {
   return null;
 }
 
-export async function postUserComment(eventId, userComment) {
+async function postUserComment(eventId, userComment) {
   if (process.env.COMMENTS_PROVIDER === "mongodb") {
     return new Promise((resolve, reject) => {
       mongodb_postUserComment(eventId, userComment)
@@ -336,7 +370,7 @@ export async function postUserComment(eventId, userComment) {
   return null;
 }
 
-export async function deleteUserComment(eventId, userComment) {
+async function deleteUserComment(eventId, userComment) {
   if (process.env.COMMENTS_PROVIDER === "mongodb") {
     return new Promise((resolve, reject) => {
       mongodb_deleteUserComment(eventId, userComment)

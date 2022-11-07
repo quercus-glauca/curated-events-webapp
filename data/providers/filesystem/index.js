@@ -12,6 +12,17 @@ import {
   readEventPost
 } from 'lib/helpers/core';
 
+export {
+  getAllEvents,
+  getFeaturedEvents,
+  getFilteredEvents,
+  getEventById,
+  postSingleEvent,
+  getUserComments,
+  postUserComment,
+  deleteUserComment,
+};
+
 const eventsDirectory = path.join(process.cwd(),
   'content', 'events');
 
@@ -25,7 +36,7 @@ const userCommentsFilename = path.join(process.cwd(),
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find all the 'events'
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function getAllEvents() {
+function getAllEvents() {
   const allEvents = [];
 
   const filenames = fs.readdirSync(eventsDirectory);
@@ -46,7 +57,7 @@ export function getAllEvents() {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find the featured 'events'
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function getFeaturedEvents() {
+function getFeaturedEvents() {
   const filteredEvents = [];
 
   const filenames = fs.readdirSync(eventsDirectory);
@@ -69,7 +80,7 @@ export function getFeaturedEvents() {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find the filtered 'events'
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function getFilteredEvents(dateFilter) {
+function getFilteredEvents(dateFilter) {
   const filteredEvents = [];
 
   const filenames = fs.readdirSync(eventsDirectory);
@@ -92,7 +103,7 @@ export function getFilteredEvents(dateFilter) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find a single 'event'
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function getEventById(id) {
+function getEventById(id) {
   let event = null;
 
   const filenames = fs.readdirSync(eventsDirectory);
@@ -119,7 +130,7 @@ export function getEventById(id) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Post a new 'event'
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function postSingleEvent(eventData, eventContent) {
+function postSingleEvent(eventData, eventContent) {
   // <<TODO>>
 
   return false;
@@ -129,7 +140,7 @@ export function postSingleEvent(eventData, eventContent) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // § UserComments : SYNC Backend Implementation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export function getUserComments(eventId) {
+function getUserComments(eventId) {
   const fileData = fs.readFileSync(userCommentsFilename);
   const userComments = JSON.parse(fileData);
   const filteredUserComments = userComments.filter((item) => (
@@ -138,7 +149,7 @@ export function getUserComments(eventId) {
   return filteredUserComments;
 }
 
-export function postUserComment(eventId, userComment) {
+function postUserComment(eventId, userComment) {
   const fileData = fs.readFileSync(userCommentsFilename);
   const userComments = JSON.parse(fileData);
   const insertedUserComment = {
@@ -153,7 +164,7 @@ export function postUserComment(eventId, userComment) {
   return insertedUserComment;
 }
 
-export function deleteUserComment(eventId, userComment) {
+function deleteUserComment(eventId, userComment) {
   const fileData = fs.readFileSync(userCommentsFilename);
   const userComments = JSON.parse(fileData);
   let deletedUserComment = {};

@@ -4,6 +4,15 @@
 import { MongoClient, ObjectId } from "mongodb";
 import _ from "lodash";
 
+export {
+  getUserProfile,
+  postSignupData,
+  deleteUserProfile,
+  getUserComments,
+  postUserComment,
+  deleteUserComment,
+};
+
 const mongodbUrl = process.env.MONGODB_LOCALSERVER_URL;
 const curatedEventsDBName = 'curatedEventsDB';
 const curatedEventsCollectionName = 'curatedEvents';
@@ -49,12 +58,33 @@ async function closeMongoClient(client) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find the 'signupData' (userProfile) in the Database Collection
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// <<TODO>>
+async function getUserProfile(userEmail) {
+  let client;
+  let providerResult;
+  try {
+    client = await connectMongoClient();
+    const db = client.db(curatedEventsDBName);
+    const collection = db.collection(userProfilesCollectionName);
+    const queryFilter = { email: userEmail };
+    const userProfile = await collection.findOne(queryFilter);
+    providerResult = !userProfile
+      ? 'Sorry, but this user does not exist... yet!'
+      : userProfile;
+    await closeMongoClient(client);
+    return providerResult;
+  }
+  catch (error) {
+    console.error('[MONGODB] Error:', error);
+    closeMongoClient(client);
+    throw (error);
+  }
+}
+
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Insert the 'signupData' (userProfile) into the Database Collection
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function postSignupData(userId, signupData) {
+async function postSignupData(signupData) {
   let client;
   let providerResult;
   try {
@@ -66,25 +96,25 @@ export async function postSignupData(userId, signupData) {
     const queryFilter = { email: signupData.email };
     const partialResult = await collection.findOne(queryFilter);
     if (partialResult !== null) {
-      providerResult = 'The user profile already exists';
+      providerResult = 'The user profile already exists!';
     }
     else {
       // Proceed with insertion
-      const insertedSignupData = {
+      const userProfile = {
         _id: new ObjectId(),
-        date: signupData.date || new Date().toISOString(),
+        date: new Date().toISOString(),
         email: signupData.email,
         name: signupData.name,
         password: signupData.password,
       };
-      const result = await collection.insertOne(insertedSignupData);
+      const result = await collection.insertOne(userProfile);
 
       // Check the 'result' and on FAILURE return an Error string
       // On SUCCESS return the full Document with its final '_id'
       console.debug('[MONGODB] result:', result);
       providerResult = (!("acknowledged" in result) || !result.acknowledged)
-        ? 'Failed to insert the user profile into the database collection'
-        : insertedSignupData;
+        ? 'Failed to insert the user profile into the database collection!'
+        : userProfile;
     }
 
     await closeMongoClient(client);
@@ -101,7 +131,10 @@ export async function postSignupData(userId, signupData) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Delete the 'signupData' (userProfile) from the Database Collection
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// <<TODO>>
+async function deleteUserProfile(userEmail) {
+  // <<TODO>>
+  return null;
+}
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,7 +143,7 @@ export async function postSignupData(userId, signupData) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Find all the 'userComments' in the Database Collection
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function getUserComments(eventId) {
+async function getUserComments(eventId) {
   let client;
   try {
     client = await connectMongoClient();
@@ -146,7 +179,7 @@ export async function getUserComments(eventId) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Insert the 'userComment' into the Database Collection
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function postUserComment(eventId, userComment) {
+async function postUserComment(eventId, userComment) {
   let client;
   try {
     client = await connectMongoClient();
@@ -166,7 +199,7 @@ export async function postUserComment(eventId, userComment) {
     // On SUCCESS return the full Document with its final '_id'
     console.debug('[MONGODB] result:', result);
     const providerResult = (!("acknowledged" in result) || !result.acknowledged)
-      ? 'Failed to insert the user comment into the database collection'
+      ? 'Failed to insert the user comment into the database collection!'
       : insertedUserComment;
 
     await closeMongoClient(client);
@@ -183,7 +216,7 @@ export async function postUserComment(eventId, userComment) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Delete the 'userComment' from the Database Collection
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export async function deleteUserComment(eventId, userComment) {
+async function deleteUserComment(eventId, userComment) {
   let client;
   try {
     client = await connectMongoClient();
@@ -200,7 +233,7 @@ export async function deleteUserComment(eventId, userComment) {
     // On SUCCESS return the full Document
     console.debug('[MONGODB] result:', result);
     const providerResult = (_.isEmpty(result) || !("acknowledged" in result) || !result.acknowledged)
-      ? 'Failed to find and delete the user comment in the database collection'
+      ? 'Failed to find and delete the user comment in the database collection!'
       : result.value;
 
     await closeMongoClient(client);
