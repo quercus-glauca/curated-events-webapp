@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "gray-matter": "4.0.3",
     "lodash": "^4.17.21",
     "mongodb": "^4.11.0",
