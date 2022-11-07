@@ -31,9 +31,15 @@ export default function ProfileForm(props) {
 
   return (
     <section className={classes.form}>
-      <h1>{'Your User Profile'}</h1>
-      <p>Email: <strong>{userEmail}</strong></p>
-      <p>Name: <strong>{userName}</strong></p>
+      <h1>{'Your Profile'}</h1>
+      <p>
+        <div className={classes.fieldLabel}>Email</div>
+        <div className={classes.fieldValue}>{userEmail}</div>
+      </p>
+      <p>
+        <div className={classes.fieldLabel}>Name</div>
+        <div className={classes.fieldValue}>{userName}</div>
+      </p>
       <form onSubmit={sendProfileDataHandler}>
         <div className={classes.control}>
           <label htmlFor='password'>Password</label>
