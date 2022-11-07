@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import ButtonLink from 'components/ui/ButtonLink';
 import classes from './MainHeader.module.css';
 
@@ -7,6 +7,10 @@ export default function MainHeader(props) {
   const { data: session, status } = useSession();
 
   const isAuthenticated = status === "authenticated";
+
+  function handleSignOut() {
+    signOut({ callbackUrl: '/' });
+  }
 
   const welcomeNavigationBar = () => (
     <div>
@@ -20,7 +24,7 @@ export default function MainHeader(props) {
         <Link href='/profile'>Profile</Link>
       </div>
       <div>
-        <ButtonLink href='#' small={true}>Logout</ButtonLink>
+        <ButtonLink small={true} onClick={handleSignOut}>Logout</ButtonLink>
       </div>
     </>
   );
