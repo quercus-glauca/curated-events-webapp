@@ -43,15 +43,14 @@ export default async function handler(req, res) {
       else {
         greetingOnSuccess = `Welcome ${signupData.name}! Your account have been created.`;
         const hashedPassword = await hashPassword(signupData.password);
-        const secureSignupData = {
-          date: signupData.date,
+        const hashedSignupData = {
           email: signupData.email,
           name: signupData.name,
           password: hashedPassword,
         };
         finalItemOrErrorString = (process.env.USERS_PROVIDER_SYNC === "true")
-          ? postSignupDataSync('E_PARAM', secureSignupData)
-          : await postSignupData('E_PARAM', secureSignupData);
+          ? postSignupDataSync(hashedSignupData)
+          : await postSignupData(hashedSignupData);
       }
 
       const [status, response] = buildPostResponse(

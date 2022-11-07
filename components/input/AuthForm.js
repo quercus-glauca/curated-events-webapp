@@ -1,4 +1,5 @@
 import { useContext, useRef, useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { NotificationContext } from 'context/NotificationProvider';
 import { postSignupData } from 'lib/api/client-fetcher';
 import classes from './AuthForm.module.css';
@@ -45,11 +46,24 @@ export default function AuthForm(props) {
       password: enteredPassword
     }
     if (isLogin) {
-      // <<TODO>> Post the auth data
+      showNotification('pending', caption, "Login in progress...");
+      signIn('credentials', {
+        redirect: false,
+        ...signupData
+      })
+        .then((result) => {
+          if (!result.error) {
+            showNotification('success', caption, `Welcome back, ${signupData.name}!`);
+            passwordInputRef.current.value = '';
+          }
+          else {
+            showNotification('error', caption, result.error);
+            passwordInputRef.current.value = '';
+          }
+        });
     }
     else {
       showNotification('pending', caption, "Sign-up in progress...");
-
       postSignupData(signupData)
         .then((result) => {
           if (result.ok) {
