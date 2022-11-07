@@ -17,6 +17,7 @@ import {
   buildMethodNotAllowed,
   buildErrorResponse
 } from 'lib/api/response-helper';
+import { hashPassword } from 'lib/helpers/core';
 
 
 export default async function handler(req, res) {
@@ -41,11 +42,12 @@ export default async function handler(req, res) {
       }
       else {
         greetingOnSuccess = `Welcome ${signupData.name}! Your account have been created.`;
+        const hashedPassword = await hashPassword(signupData.password);
         const secureSignupData = {
           date: signupData.date,
           email: signupData.email,
           name: signupData.name,
-          password: 'DUMMY-HASHED-PASSWORD-VALUE',
+          password: hashedPassword,
         };
         finalItemOrErrorString = (process.env.USERS_PROVIDER_SYNC === "true")
           ? postSignupDataSync('E_PARAM', secureSignupData)
