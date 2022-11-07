@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import classes from './Notification.module.css';
 
-const delayToHideInSeconds = 7;
+const delayToHideSuccessInSeconds = 3;
+const delayToHideErrorInSeconds = 7;
 
 export default function Notification(props) {
   const { status, title, message } = props.notification;
@@ -21,6 +22,9 @@ export default function Notification(props) {
 
   useEffect(() => {
     if (status !== 'pending') {
+      const delayToHideInSeconds = status === 'success'
+        ? delayToHideSuccessInSeconds
+        : delayToHideErrorInSeconds;
       const timeoutId = setTimeout(() => {
         props.hideNotification();
       }, delayToHideInSeconds * 1000);

@@ -14,14 +14,14 @@ export default function MainHeader(props) {
 
   const welcomeNavigationBar = () => (
     <div>
-      <Link href='/login'>Login</Link>
+      <Link href='/auth/login'>Login</Link>
     </div>
   );
 
   const authenticatedNavigationBar = () => (
     <>
       <div>
-        <Link href='/profile'>Profile</Link>
+        <Link href='/auth/profile'>Profile</Link>
       </div>
       <div>
         <ButtonLink small={true} onClick={handleSignOut}>Logout</ButtonLink>

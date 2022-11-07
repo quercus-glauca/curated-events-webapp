@@ -1,5 +1,5 @@
-import { useContext, useRef, useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { useContext, useRef, useState } from 'react';
 import { NotificationContext } from 'context/NotificationProvider';
 import { postSignupData } from 'lib/api/client-fetcher';
 import classes from './AuthForm.module.css';
@@ -12,8 +12,7 @@ export default function AuthForm(props) {
   const nameInputRef = useRef();
   const passwordInputRef = useRef();
 
-  const { showNotification } = useContext(NotificationContext);
-
+  const { showNotification, thenRedirect } = useContext(NotificationContext);
 
   function toggleAuthModeHandler() {
     setIsLogin((prevState) => !prevState);
@@ -54,6 +53,7 @@ export default function AuthForm(props) {
         .then((result) => {
           if (!result.error) {
             showNotification('success', caption, `Welcome back, ${signupData.name}!`);
+            thenRedirect(true, '/', 'back');
             passwordInputRef.current.value = '';
           }
           else {
