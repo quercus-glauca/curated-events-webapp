@@ -12,9 +12,13 @@
   color: white;
 }
 
-.form p {
+.fieldGroup {
   color: white;
-  text-align: left;
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
 }
 
 .fieldLabel {
@@ -23,7 +27,6 @@
 
 .fieldValue {
   font-weight: bold;
-  margin-left: 1.5rem;
 }
 
 .control {

@@ -35,7 +35,7 @@ export default function AuthForm(props) {
       !enteredPassword ||
       enteredPassword.trim() === ''
     ) {
-      showNotification('error', caption, 'Please enter a valid email address, name and password!')
+      showNotification('error', caption, 'Please enter a valid email address, name and password!');
       return;
     }
 

@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { getUserProfile, getUserProfileSync } from 'data/providers';
-import { verifyPassword } from 'lib/helpers/core';
+import { acquireUserProfile } from 'lib/helpers/core';
 
 export default NextAuth({
   providers: [
@@ -20,17 +19,7 @@ export default NextAuth({
         // The returned **OBJECT** will be encoded into the final JWT Token.
         const { email, password: plainPassword } = credentials;
 
-        const userProfile = (process.env.USERS_PROVIDER_SYNC === "true")
-          ? getUserProfileSync(email)
-          : await getUserProfile(email);
-        if (typeof userProfile === "string") {
-          throw new Error(userProfile);
-        }
-
-        const passwordsMatch = await verifyPassword(plainPassword, userProfile.password);
-        if (!passwordsMatch) {
-          throw new Error('Sorry, but the password did not match!');
-        }
+        const userProfile = await acquireUserProfile(email, plainPassword);
 
         const simpleUserProfile = {
           email: userProfile.email,
