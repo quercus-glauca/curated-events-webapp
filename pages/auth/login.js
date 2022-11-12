@@ -15,7 +15,7 @@ export async function getServerSideProps(context) {
   if (token) {
     return ({
       redirect: {
-        destination: '/auth/profile',
+        destination: '/user/profile',
         permanent: false
       }
     });

@@ -11,12 +11,11 @@ import {
 } from 'lib/validate/input-data';
 
 import {
-  buildGetResponse,
   buildPostResponse,
-  buildDeleteResponse,
-  buildMethodNotAllowed,
-  buildErrorResponse
+  buildMethodNotAllowedResponse,
+  buildServerErrorResponse
 } from 'lib/api/response-helper';
+
 import { hashPassword } from 'lib/helpers/core';
 
 
@@ -62,7 +61,7 @@ export default async function handler(req, res) {
       res.status(status).json(response);
     }
     catch (error) {
-      const [status, response] = buildErrorResponse(
+      const [status, response] = buildServerErrorResponse(
         error,
         req.method,
         apiUrl,
@@ -74,7 +73,7 @@ export default async function handler(req, res) {
 
   }
   else {
-    const [status, response] = buildMethodNotAllowed(
+    const [status, response] = buildMethodNotAllowedResponse(
       apiUrl,
       req.method);
     res.status(status).json(response);

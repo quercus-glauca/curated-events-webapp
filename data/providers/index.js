@@ -7,6 +7,7 @@ import {
   getFilteredEvents as dummy_getFilteredEvents,
   getEventById as dummy_getEventById,
   getUserProfile as dummy_getUserProfile,
+  patchUserProfile as dummy_patchUserProfile,
   postSignupData as dummy_postSignupData,
   deleteUserProfile as dummy_deleteUserProfile,
   getUserComments as dummy_getUserComments,
@@ -33,6 +34,7 @@ import {
 
 import {
   getUserProfile as mongodb_getUserProfile,
+  patchUserProfile as mongodb_patchUserProfile,
   postSignupData as mongodb_postSignupData,
   deleteUserProfile as mongodb_deleteUserProfile,
   getUserComments as mongodb_getUserComments,
@@ -51,6 +53,8 @@ export {
   getEventByIdSync,
   getUserProfile,
   getUserProfileSync,
+  patchUserProfile,
+  patchUserProfileSync,
   postSignupData,
   postSignupDataSync,
   deleteUserProfile,
@@ -100,7 +104,17 @@ const __registrationData = {
 const __signupData = {
   email: '',
   name: '',
-  password: '',    // plain-text
+  password: '',         // plain-text
+};
+
+const __changeUserProfile = {
+  email: '',
+  name: '',
+  password: '',         // plain-text
+  change: {
+    name: '',           // [optional]
+    password: '',       // [optional] plain-text
+  }
 };
 
 const __userProfile = {
@@ -108,7 +122,7 @@ const __userProfile = {
   date: new Date().toISOString(),
   email: '',
   name: '',
-  password: '',    // hashed
+  password: '',         // hashed
 };
 
 const __simpleUserProfile = {
@@ -247,6 +261,14 @@ function getUserProfileSync(userEmail) {
   return null;
 }
 
+function patchUserProfileSync(changeUserProfile) {
+  if (process.env.COMMENTS_PROVIDER === "dummy") {
+    return dummy_patchUserProfile(changeUserProfile);
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
 function postSignupDataSync(signupData) {
   if (process.env.COMMENTS_PROVIDER === "dummy") {
     return dummy_postSignupData(signupData);
@@ -272,6 +294,18 @@ async function getUserProfile(userEmail) {
   if (process.env.USERS_PROVIDER === "mongodb") {
     return new Promise((resolve, reject) => {
       mongodb_getUserProfile(userEmail)
+        .then((result) => { resolve(result); })
+        .catch((error) => { reject(error); });
+    });
+  }
+  console.assert(false, 'Configuration Failure!');
+  return null;
+}
+
+async function patchUserProfile(changeUserProfile) {
+  if (process.env.USERS_PROVIDER === "mongodb") {
+    return new Promise((resolve, reject) => {
+      mongodb_patchUserProfile(changeUserProfile)
         .then((result) => { resolve(result); })
         .catch((error) => { reject(error); });
     });

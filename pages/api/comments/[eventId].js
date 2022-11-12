@@ -6,8 +6,6 @@ import {
   getUserCommentsSync,
   postUserComment,
   postUserCommentSync,
-  deleteUserComment,
-  deleteUserCommentSync,
 } from 'data/providers';
 
 import {
@@ -17,9 +15,8 @@ import {
 import {
   buildGetResponse,
   buildPostResponse,
-  buildDeleteResponse,
-  buildMethodNotAllowed,
-  buildErrorResponse
+  buildMethodNotAllowedResponse,
+  buildServerErrorResponse
 } from 'lib/api/response-helper';
 
 
@@ -49,7 +46,7 @@ export default async function handler(req, res) {
       res.status(status).json(response);
     }
     catch (error) {
-      const [status, response] = buildErrorResponse(
+      const [status, response] = buildServerErrorResponse(
         error,
         req.method,
         apiUrl,
@@ -86,7 +83,7 @@ export default async function handler(req, res) {
       res.status(status).json(response);
     }
     catch (error) {
-      const [status, response] = buildErrorResponse(
+      const [status, response] = buildServerErrorResponse(
         error,
         req.method,
         apiUrl,
@@ -98,7 +95,7 @@ export default async function handler(req, res) {
   }
 
   else {
-    const [status, response] = buildMethodNotAllowed(
+    const [status, response] = buildMethodNotAllowedResponse(
       apiUrl,
       req.method);
     res.status(status).json(response);

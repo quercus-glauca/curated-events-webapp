@@ -7,6 +7,7 @@ export {
   getFilteredEvents,
   getEventById,
   getUserProfile,
+  patchUserProfile,
   postSignupData,
   deleteUserProfile,
   getUserComments,
@@ -102,6 +103,10 @@ let DUMMY_USERS = [
 ];
 
 function getUserProfile(userEmail) {
+  return DUMMY_USERS[0];
+}
+
+function patchUserProfile(changeUserProfile) {
   return DUMMY_USERS[0];
 }
 

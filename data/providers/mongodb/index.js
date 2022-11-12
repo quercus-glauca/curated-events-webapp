@@ -6,6 +6,7 @@ import _ from "lodash";
 
 export {
   getUserProfile,
+  patchUserProfile,
   postSignupData,
   deleteUserProfile,
   getUserComments,
@@ -67,6 +68,41 @@ async function getUserProfile(userEmail) {
     const collection = db.collection(userProfilesCollectionName);
     const queryFilter = { email: userEmail };
     const userProfile = await collection.findOne(queryFilter);
+    providerResult = !userProfile
+      ? 'Sorry, but this user does not exist... yet!'
+      : userProfile;
+    await closeMongoClient(client);
+    return providerResult;
+  }
+  catch (error) {
+    console.error('[MONGODB] Error:', error);
+    closeMongoClient(client);
+    throw (error);
+  }
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Update the 'signupData' (userProfile) in the Database Collection
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+async function patchUserProfile(changeUserProfile) {
+  let client;
+  let providerResult;
+  try {
+    client = await connectMongoClient();
+    const db = client.db(curatedEventsDBName);
+    const collection = db.collection(userProfilesCollectionName);
+    const queryFilter = { email: changeUserProfile.email };
+    const update = {
+      $set: {
+        ...(changeUserProfile.change.name && { name: changeUserProfile.change.name }),
+        ...(changeUserProfile.change.password && { password: changeUserProfile.change.password }),
+      }
+    };
+    const options = {
+      returnDocument: "after",
+    };
+    const userProfile = await collection.findOneAndUpdate(queryFilter, update, options);
     providerResult = !userProfile
       ? 'Sorry, but this user does not exist... yet!'
       : userProfile;

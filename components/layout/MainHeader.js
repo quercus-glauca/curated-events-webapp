@@ -21,7 +21,7 @@ export default function MainHeader(props) {
   const authenticatedNavigationBar = () => (
     <>
       <div>
-        <Link href='/auth/profile'>Profile</Link>
+        <Link href='/user/profile'>Profile</Link>
       </div>
       <div>
         <ButtonLink small={true} onClick={handleSignOut}>Logout</ButtonLink>
